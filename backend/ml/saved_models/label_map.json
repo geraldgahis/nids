@@ -1,10 +1,32 @@
 {
-  "0": "BENIGN",
-  "1": "Botnet",
-  "2": "BruteForce",
-  "3": "DDoS",
-  "4": "Heartbleed",
-  "5": "Infiltration",
-  "6": "PortScan",
-  "7": "WebAttack"
+    "0": {
+        "name": "Normal",
+        "mitre_id": "None",
+        "description": "Benign network traffic"
+    },
+    "1": {
+        "name": "Port Scan",
+        "mitre_id": "T1046",
+        "description": "Network Service Discovery"
+    },
+    "2": {
+        "name": "DDoS",
+        "mitre_id": "T1498",
+        "description": "Network Denial of Service"
+    },
+    "3": {
+        "name": "Brute Force",
+        "mitre_id": "T1110",
+        "description": "Brute Force Credentials"
+    },
+    "4": {
+        "name": "Botnet",
+        "mitre_id": "T1008",
+        "description": "Fallback Channels (C2)"
+    },
+    "5": {
+        "name": "Web Exploit",
+        "mitre_id": "T1190",
+        "description": "Exploit Public-Facing Application"
+    }
 }

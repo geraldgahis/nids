@@ -1103,7 +1103,6 @@
     </style>
   </head>
   <body>
-    <!-- HEADER -->
     <header>
       <div class="logo">
         <svg class="logo-hex" viewBox="0 0 30 30" width="30" height="30">
@@ -1132,36 +1131,16 @@
         </svg>
         NIDS
       </div>
-      <!-- <div class="live-pill">
-        <div class="blink"></div>
-        LIVE DETECTION
-      </div> -->
       <nav>
         <a href="#dashboard">Dashboard</a>
-        <a href="#concepts">Concepts</a>
+        <!-- <a href="#concepts">Concepts</a> -->
         <a href="#mitre">MITRE</a>
-        <!-- <a href="#metrics">Metrics</a>
-        <a href="#demo" class="nav-btn">Live Demo</a> -->
       </nav>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
       <div class="hero-glow"></div>
       <div class="wrap">
-        <!-- <div class="tag"><div class="blink"></div>GROUP 3 — IAS1 2nd Semester 2025–2026</div> -->
-        <h1>
-          Every packet tells a <em>story</em>.<br />We listen in real time.
-        </h1>
-        <p class="hero-sub">
-          A machine-learning-powered Network Intrusion Detection System —
-          capturing traffic, extracting 32 features, classifying attacks, and
-          mapping threats to MITRE ATTACK in milliseconds.
-        </p>
-        <div class="hero-btns">
-          <a href="#dashboard" class="btn btn-primary">▶ View Live Dashboard</a>
-          <a href="#concepts" class="btn btn-ghost">How It Works</a>
-        </div>
         <div class="terminal">
           <div class="term-bar">
             <div class="tdot td1"></div>
@@ -1197,7 +1176,6 @@
       </div>
     </section>
 
-    <!-- LIVE DASHBOARD -->
     <section class="sec" id="dashboard" style="background: var(--surface)">
       <div class="wrap">
         <div class="sec-tag">Live Dashboard</div>
@@ -1207,7 +1185,6 @@
           engine classify each flow and raise severity-graded alerts.
         </p>
 
-        <!-- KPIs -->
         <div class="kpi-row">
           <div class="kpi kpi-acc">
             <div class="kpi-lbl">Total Flows</div>
@@ -1243,7 +1220,6 @@
           </div>
         </div>
 
-        <!-- Charts -->
         <div class="chart-row">
           <div class="panel">
             <div class="panel-hd">📈 Traffic Volume — 60s Rolling Window</div>
@@ -1255,7 +1231,6 @@
           </div>
         </div>
 
-        <!-- Alert Feed + Attackers -->
         <div class="bottom-row">
           <div>
             <div class="alert-wrap">
@@ -1305,8 +1280,7 @@
       </div>
     </section>
 
-    <!-- KEY CONCEPTS -->
-    <section class="sec" id="concepts">
+    <!-- <section class="sec" id="concepts">
       <div class="wrap">
         <div class="sec-tag">Key Lessons & Concepts</div>
         <h2>What the System Demonstrates</h2>
@@ -1315,7 +1289,6 @@
           project.
         </p>
 
-        <!-- Pipeline -->
         <div class="panel" style="margin-bottom: 2rem; overflow-x: auto">
           <div class="panel-hd">🔄 Detection Pipeline</div>
           <div class="pipeline">
@@ -1352,7 +1325,6 @@
         </div>
 
         <div class="concept-grid">
-          <!-- How Network Packets Work -->
           <div class="concept">
             <h3>📦 How Network Packets Work</h3>
             <p>
@@ -1365,7 +1337,6 @@
             </p>
           </div>
 
-          <!-- 7-Layer OSI Model -->
           <div class="concept">
             <h3>🌐 The 7-Layer OSI Model</h3>
             <p>
@@ -1395,7 +1366,6 @@
             </table>
           </div>
 
-          <!-- Anomaly vs Signature Detection -->
           <div class="concept">
             <h3>🔎 Anomaly vs. Signature Detection</h3>
             <p>
@@ -1422,7 +1392,6 @@
             </div>
           </div>
 
-          <!-- Isolation Forest -->
           <div class="concept">
             <h3>🌲 Isolation Forest Algorithm</h3>
             <p>
@@ -1447,7 +1416,6 @@
             </p>
           </div>
 
-          <!-- Alert Fatigue -->
           <div class="concept" style="grid-column: 1/-1">
             <h3>😴 The Alert Fatigue Problem</h3>
             <p>
@@ -1520,7 +1488,6 @@
           </div>
         </div>
 
-        <!-- Feature Categories -->
         <div class="feat-grid" style="margin-top: 2rem">
           <div class="feat">
             <div class="feat-ico" style="background: rgba(0, 207, 255, 0.1)">
@@ -1575,9 +1542,8 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
-    <!-- MITRE ATT&CK -->
     <section class="sec" id="mitre" style="background: var(--surface)">
       <div class="wrap">
         <div class="sec-tag">Threat Intelligence</div>
@@ -1674,262 +1640,12 @@
       </div>
     </section>
 
-    <!-- METRICS -->
-    <!-- <section class="sec" id="metrics">
-      <div class="wrap">
-        <div class="sec-tag">Model Performance</div>
-        <h2>Evaluation Results</h2>
-        <p class="lead">
-          Trained on 50,000 CICIDS2017-style samples, 80/20 stratified split.
-          Metrics computed on held-out test set.
-        </p>
-        <div class="metrics-row">
-          <div class="met-card">
-            <div class="met-val" id="m-prec">96.2%</div>
-            <div class="met-lbl">Precision</div>
-            <div class="met-bar">
-              <div class="met-fill" id="mb-prec" style="width: 0"></div>
-            </div>
-          </div>
-          <div class="met-card">
-            <div class="met-val" id="m-rec" style="color: var(--green)">
-              94.8%
-            </div>
-            <div class="met-lbl">Recall</div>
-            <div class="met-bar">
-              <div
-                class="met-fill"
-                id="mb-rec"
-                style="width: 0; background: var(--green)"
-              ></div>
-            </div>
-          </div>
-          <div class="met-card">
-            <div class="met-val" id="m-f1" style="color: var(--purple)">
-              95.5%
-            </div>
-            <div class="met-lbl">F1-Score</div>
-            <div class="met-bar">
-              <div
-                class="met-fill"
-                id="mb-f1"
-                style="width: 0; background: var(--purple)"
-              ></div>
-            </div>
-          </div>
-          <div class="met-card">
-            <div class="met-val" id="m-fpr" style="color: var(--amber)">
-              1.8%
-            </div>
-            <div class="met-lbl">False Positive Rate</div>
-            <div class="met-bar">
-              <div
-                class="met-fill"
-                id="mb-fpr"
-                style="width: 0; background: var(--amber)"
-              ></div>
-            </div>
-          </div>
-        </div>
-        <div class="sec-tag" style="margin-bottom: 1rem">
-          Per-Class Classification Report
-        </div>
-        <div class="report-grid">
-          <div class="rpt">
-            <div class="rpt-class">BENIGN</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.98</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.97</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.97</strong>
-            </div>
-            <div class="rpt-row">
-              <span>support</span><strong>6,000</strong>
-            </div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--red)">PortScan</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.97</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.96</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.96</strong>
-            </div>
-            <div class="rpt-row">
-              <span>support</span><strong>1,000</strong>
-            </div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--red)">DDoS</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.95</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.94</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.94</strong>
-            </div>
-            <div class="rpt-row"><span>support</span><strong>800</strong></div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--amber)">BruteForce</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.94</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.93</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.93</strong>
-            </div>
-            <div class="rpt-row"><span>support</span><strong>700</strong></div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--amber)">WebAttack</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.96</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.95</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.95</strong>
-            </div>
-            <div class="rpt-row"><span>support</span><strong>600</strong></div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--purple)">Botnet</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.93</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.91</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.92</strong>
-            </div>
-            <div class="rpt-row"><span>support</span><strong>500</strong></div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--pink)">Infiltration</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.91</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.88</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.89</strong>
-            </div>
-            <div class="rpt-row"><span>support</span><strong>200</strong></div>
-          </div>
-          <div class="rpt">
-            <div class="rpt-class" style="color: var(--accent)">Heartbleed</div>
-            <div class="rpt-row">
-              <span>precision</span><strong>0.97</strong>
-            </div>
-            <div class="rpt-row"><span>recall</span><strong>0.96</strong></div>
-            <div class="rpt-row">
-              <span>f1-score</span><strong>0.96</strong>
-            </div>
-            <div class="rpt-row"><span>support</span><strong>200</strong></div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- LIVE DEMO SECTION -->
-    <!-- <section class="sec" id="demo" style="background: var(--surface)">
-      <div class="wrap">
-        <div class="sec-tag">Pro Tip — Live Demo</div>
-        <h2>nmap Port Scan Demo</h2>
-        <p class="lead">
-          Run a live port scan inside a VM during your presentation. Watch the
-          'hacker' get caught in real time — nothing impresses an audience more.
-        </p>
-        <div class="demo-box">
-          <div class="demo-steps">
-            <div class="demo-step">
-              <div class="step-num">Step 01</div>
-              <div class="step-ico">🖥️</div>
-              <h4>Start Backend</h4>
-              <p>
-                Run
-                <code
-                  style="
-                    color: var(--green);
-                    font-family: var(--mono);
-                    font-size: 0.76rem;
-                  "
-                  >python backend/api.py</code
-                >
-                and open this dashboard in your browser.
-              </p>
-            </div>
-            <div class="demo-step">
-              <div class="step-num">Step 02</div>
-              <div class="step-ico">🦫</div>
-              <h4>Start Zeek</h4>
-              <p>
-                Capture live traffic:
-                <code
-                  style="
-                    color: var(--green);
-                    font-family: var(--mono);
-                    font-size: 0.76rem;
-                  "
-                  >sudo zeek -i eth0</code
-                >
-                on the target machine.
-              </p>
-            </div>
-            <div class="demo-step">
-              <div class="step-num">Step 03</div>
-              <div class="step-ico">💀</div>
-              <h4>Launch Attack</h4>
-              <p>
-                From a VM, run the nmap SYN scan. Thousands of packets flood the
-                target within seconds.
-              </p>
-            </div>
-            <div class="demo-step">
-              <div class="step-num">Step 04</div>
-              <div class="step-ico">🚨</div>
-              <h4>Watch Alerts Fire</h4>
-              <p>
-                HIGH-severity
-                <strong style="color: var(--red)">PortScan</strong> alerts with
-                MITRE T1046 appear on the dashboard within ~2 seconds.
-              </p>
-            </div>
-          </div>
-          <div class="nmap-cmd">
-            <span class="prompt">attacker@vm:~$</span>
-            <span>nmap -sS -T4 -p 1-65535 192.168.1.1</span>
-          </div>
-          <div
-            style="
-              margin-top: 1.25rem;
-              background: rgba(255, 255, 255, 0.02);
-              border-radius: 8px;
-              padding: 1rem;
-              font-size: 0.8rem;
-              color: var(--muted2);
-              line-height: 1.7;
-            "
-          >
-            <strong style="color: #fff">Why the ML model catches it:</strong>
-            nmap's SYN scan creates a unique feature signature —
-            <span style="color: var(--accent)">syn_flag_count → 0.95+</span>,
-            <span style="color: var(--amber)">flow_duration → &lt;0.1s</span>,
-            <span style="color: var(--green)">flow_packets_per_sec → 0.92+</span
-            >, <span style="color: var(--red)">bwd_bytes ≈ 0</span> (targets not
-            responding). Random Forest recognizes this cluster from training on
-            CICIDS2017 data → PortScan, 94%+ confidence.
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- FOOTER -->
     <footer>
       <div class="wrap">NIDS — ML-Based Network Intrusion Detection System</div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
     <script>
       // ── State ────────────────────────────────────────────────────────────────────
       const ATTACK_PROFILES = {
@@ -1950,7 +1666,7 @@
           .fill(0)
           .map((_, i) => p + (i + 1)),
       );
-      const ATK_IPS = ["203.0.113.", "198.51.100."].flatMap((p) =>
+      const ATK_IPS = ["203.0.113.", "198.51.100.", "0.0.0."].flatMap((p) =>
         Array(10)
           .fill(0)
           .map((_, i) => p + (i + 1)),
@@ -2247,14 +1963,6 @@
 
       setInterval(tick_fn, 800);
 
-      // ── Metric bar animations ─────────────────────────────────────────────────────
-      setTimeout(() => {
-        document.getElementById("mb-prec").style.width = "96.2%";
-        document.getElementById("mb-rec").style.width = "94.8%";
-        document.getElementById("mb-f1").style.width = "95.5%";
-        document.getElementById("mb-fpr").style.width = "1.8%";
-      }, 600);
-
       // ── Try live API ──────────────────────────────────────────────────────────────
       async function tryAPI() {
         try {
@@ -2263,26 +1971,132 @@
           });
           if (r.ok) {
             const m = await r.json();
-            document.getElementById("m-prec").textContent =
-              (m.precision * 100).toFixed(1) + "%";
-            document.getElementById("m-rec").textContent =
-              (m.recall * 100).toFixed(1) + "%";
-            document.getElementById("m-f1").textContent =
-              (m.f1 * 100).toFixed(1) + "%";
-            document.getElementById("m-fpr").textContent =
-              (m.false_positive_rate * 100).toFixed(1) + "%";
-            document.getElementById("mb-prec").style.width =
-              m.precision * 100 + "%";
-            document.getElementById("mb-rec").style.width =
-              m.recall * 100 + "%";
-            document.getElementById("mb-f1").style.width = m.f1 * 100 + "%";
-            document.getElementById("mb-fpr").style.width =
-              m.false_positive_rate * 100 + "%";
+            if (document.getElementById("m-prec")) {
+              document.getElementById("m-prec").textContent =
+                (m.precision * 100).toFixed(1) + "%";
+              document.getElementById("m-rec").textContent =
+                (m.recall * 100).toFixed(1) + "%";
+              document.getElementById("m-f1").textContent =
+                (m.f1 * 100).toFixed(1) + "%";
+              document.getElementById("m-fpr").textContent =
+                (m.false_positive_rate * 100).toFixed(1) + "%";
+              document.getElementById("mb-prec").style.width =
+                m.precision * 100 + "%";
+              document.getElementById("mb-rec").style.width =
+                m.recall * 100 + "%";
+              document.getElementById("mb-f1").style.width = m.f1 * 100 + "%";
+              document.getElementById("mb-fpr").style.width =
+                m.false_positive_rate * 100 + "%";
+            }
           }
         } catch (_) {}
       }
       tryAPI();
       setTimeout(tryAPI, 5000);
+    </script>
+
+    <style>
+      #nids-toast-box {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .nids-toast {
+        background: #0b0f1a;
+        border: 1px solid #1a2640;
+        border-left: 4px solid #ffb300;
+        color: #d8e8f5;
+        padding: 15px 20px;
+        border-radius: 6px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        transform: translateX(120%);
+      }
+      .nids-toast.toast-high {
+        border-left-color: #ff3355;
+      }
+      .nids-toast-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #fff;
+      }
+      .nids-toast-ip {
+        color: #ff3355;
+        font-weight: bold;
+      }
+      @keyframes slideInRight {
+        to {
+          transform: translateX(0);
+        }
+      }
+      .toast-fade {
+        animation: fadeOutUp 0.4s forwards;
+      }
+      @keyframes fadeOutUp {
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+      }
+    </style>
+
+    <div id="nids-toast-box"></div>
+
+    <script>
+      // Tracks IPs so we don't spam the screen
+      const warnedIPs = new Set();
+
+      function spawnToast(ip, count) {
+        const box = document.getElementById("nids-toast-box");
+        const toast = document.createElement("div");
+
+        // Escalate the UI severity if the attacker is extremely aggressive
+        const isCritical = count >= 10;
+        const severityClass = isCritical ? "toast-high" : "";
+        const icon = isCritical ? "🔥" : "🏴‍☠️";
+
+        toast.className = `nids-toast ${severityClass}`;
+        toast.innerHTML = `
+          <div class="nids-toast-header">
+            <span>${icon} Top Attacker Alert</span>
+          </div>
+          <div>Source IP: <span class="nids-toast-ip">${ip}</span></div>
+          <div style="color: #6a8aaa; font-size: 0.75rem; margin-top: 4px;">Registered <b>${count}</b> malicious flows</div>
+        `;
+
+        box.appendChild(toast);
+
+        // Auto-remove the popup after 6 seconds
+        setTimeout(() => {
+          toast.classList.add("toast-fade");
+          setTimeout(() => toast.remove(), 400);
+        }, 6000);
+      }
+
+      // Instead of polling the API, we poll the global Simulator state (S.attackerMap)
+      function pollTopAttackers() {
+        // S.attackerMap is generated by your existing simulator script above
+        if (typeof S === "undefined" || !S.attackerMap) return;
+
+        for (const [ip, count] of Object.entries(S.attackerMap)) {
+          // Trigger if they hit 5 times, and we haven't warned about them yet
+          if (count >= 5 && !warnedIPs.has(ip)) {
+            spawnToast(ip, count);
+            warnedIPs.add(ip);
+          }
+        }
+      }
+
+      // Run the background checker every 2 seconds
+      setInterval(pollTopAttackers, 2000);
     </script>
   </body>
 </html>
