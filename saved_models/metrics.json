@@ -1,0 +1,6 @@
+{
+    "f1_score": 0.7081,
+    "false_positive_rate": 0.0,
+    "pipeline_status": "Complete: Synthetic Ingest -> Train -> Evaluate",
+    "models_compared": "Isolation Forest (Anomaly) vs Random Forest (Signature)"
+}
