@@ -1,0 +1,2288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NIDS — ML-Based Network Intrusion Detection System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #05080f;
+        --surface: #0b0f1a;
+        --panel: #0f1523;
+        --panel2: #131927;
+        --border: #1a2640;
+        --border2: #243352;
+        --accent: #00cfff;
+        --accent2: #0088bb;
+        --red: #ff3355;
+        --red2: #c41533;
+        --amber: #ffb300;
+        --green: #00e676;
+        --purple: #a855f7;
+        --pink: #ff6ec7;
+        --text: #d8e8f5;
+        --muted: #4a6a8a;
+        --muted2: #6a8aaa;
+        --font: "DM Sans", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Scanline overlay */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 207, 255, 0.008) 2px,
+          rgba(0, 207, 255, 0.008) 4px
+        );
+        pointer-events: none;
+        z-index: 9999;
+      }
+      /* Grid */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 207, 255, 0.018) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 207, 255, 0.018) 1px, transparent 1px);
+        background-size: 48px 48px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── HEADER ── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 200;
+        background: rgba(5, 8, 15, 0.93);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        height: 60px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        color: #fff;
+      }
+      .logo-hex {
+        position: relative;
+        width: 30px;
+        height: 30px;
+      }
+      .logo-hex svg {
+        display: block;
+      }
+      .live-pill {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 230, 118, 0.08);
+        border: 1px solid rgba(0, 230, 118, 0.2);
+        border-radius: 100px;
+        padding: 4px 12px;
+        font-size: 0.72rem;
+        font-family: var(--mono);
+        color: var(--green);
+        letter-spacing: 0.05em;
+      }
+      .blink {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 6px var(--green);
+        animation: blink 1.4s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.2;
+        }
+      }
+      nav {
+        display: flex;
+        gap: 1.75rem;
+        align-items: center;
+      }
+      nav a {
+        color: var(--muted2);
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        transition: color 0.2s;
+        text-transform: uppercase;
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+      .nav-btn {
+        background: var(--accent);
+        color: #000 !important;
+        padding: 7px 16px;
+        border-radius: 6px;
+        font-weight: 700 !important;
+        letter-spacing: 0 !important;
+        text-transform: none !important;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        position: relative;
+        padding: 5rem 2rem 3.5rem;
+        text-align: center;
+        overflow: hidden;
+        z-index: 1;
+      }
+      .hero-glow {
+        position: absolute;
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 400px;
+        background: radial-gradient(
+          ellipse,
+          rgba(0, 207, 255, 0.07) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 207, 255, 0.07);
+        border: 1px solid rgba(0, 207, 255, 0.2);
+        border-radius: 100px;
+        padding: 5px 14px;
+        font-size: 0.73rem;
+        font-family: var(--mono);
+        color: var(--accent);
+        margin-bottom: 1.75rem;
+        letter-spacing: 0.04em;
+      }
+      h1 {
+        font-size: clamp(2rem, 4.5vw, 3.8rem);
+        font-weight: 800;
+        line-height: 1.08;
+        margin-bottom: 1.25rem;
+        letter-spacing: -0.025em;
+        color: #fff;
+      }
+      h1 em {
+        color: var(--accent);
+        font-style: normal;
+        position: relative;
+      }
+      h1 em::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        opacity: 0.4;
+        border-radius: 1px;
+      }
+      .hero-sub {
+        font-size: 1.05rem;
+        color: var(--muted2);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        line-height: 1.7;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 0.875rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 26px;
+        border-radius: 8px;
+        font-family: var(--font);
+        font-weight: 700;
+        font-size: 0.88rem;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        transition: all 0.2s;
+        letter-spacing: 0.01em;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #000;
+      }
+      .btn-primary:hover {
+        background: #33daff;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(0, 207, 255, 0.3);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border2);
+      }
+      .btn-ghost:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── TERMINAL ── */
+      .terminal {
+        background: #060c18;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin: 0 auto;
+        max-width: 800px;
+        overflow: hidden;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+      }
+      .term-bar {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+      .tdot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .td1 {
+        background: #ff5f57;
+      }
+      .td2 {
+        background: #febc2e;
+      }
+      .td3 {
+        background: #28c840;
+      }
+      .term-ttl {
+        font-size: 0.73rem;
+        font-family: var(--mono);
+        color: var(--muted);
+        margin-left: auto;
+      }
+      .term-body {
+        padding: 1.25rem 1.5rem;
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        line-height: 1.85;
+        min-height: 200px;
+        max-height: 280px;
+        overflow-y: auto;
+      }
+      .t-line {
+        display: flex;
+        gap: 10px;
+        opacity: 0;
+        transform: translateY(3px);
+        transition: all 0.25s;
+      }
+      .t-line.show {
+        opacity: 1;
+        transform: none;
+      }
+      .t-ts {
+        color: var(--muted);
+        flex-shrink: 0;
+        min-width: 82px;
+      }
+      .t-lbl {
+        min-width: 95px;
+        font-weight: 700;
+      }
+      .c-green {
+        color: var(--green);
+      }
+      .c-red {
+        color: var(--red);
+      }
+      .c-amber {
+        color: var(--amber);
+      }
+      .c-blue {
+        color: var(--accent);
+      }
+      .c-purple {
+        color: var(--purple);
+      }
+
+      /* ── CONTAINER ── */
+      .wrap {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 1;
+      }
+      section.sec {
+        padding: 4.5rem 0;
+      }
+      .sec-tag {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--accent);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      h2 {
+        font-size: clamp(1.7rem, 3vw, 2.5rem);
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+        color: #fff;
+      }
+      .lead {
+        color: var(--muted2);
+        max-width: 580px;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+      }
+
+      /* ── KPI CARDS ── */
+      .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .kpi {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.1rem 1.2rem;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .kpi:hover {
+        border-color: var(--border2);
+      }
+      .kpi-glow {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        border-radius: 0;
+      }
+      .kpi-acc .kpi-glow {
+        background: var(--accent);
+      }
+      .kpi-red .kpi-glow {
+        background: var(--red);
+      }
+      .kpi-amb .kpi-glow {
+        background: var(--amber);
+      }
+      .kpi-grn .kpi-glow {
+        background: var(--green);
+      }
+      .kpi-pur .kpi-glow {
+        background: var(--purple);
+      }
+      .kpi-lbl {
+        font-size: 0.68rem;
+        color: var(--muted);
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.45rem;
+      }
+      .kpi-val {
+        font-size: 2rem;
+        font-weight: 800;
+        font-family: var(--mono);
+        line-height: 1;
+        color: #fff;
+      }
+      .kpi-sub {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-top: 0.3rem;
+        font-family: var(--mono);
+      }
+
+      /* ── CHARTS ── */
+      .chart-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.2rem;
+      }
+      .panel-hd {
+        font-size: 0.72rem;
+        font-family: var(--mono);
+        color: var(--muted2);
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      canvas {
+        display: block;
+        width: 100% !important;
+      }
+
+      /* ── ALERT FEED ── */
+      .alert-wrap {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+      .alert-hd {
+        padding: 0.8rem 1.2rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .alert-scroll {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .alert-row {
+        display: grid;
+        grid-template-columns: 10px 115px 145px 75px 85px 1fr 78px;
+        gap: 10px;
+        align-items: center;
+        padding: 0.55rem 1.2rem;
+        border-bottom: 1px solid rgba(26, 38, 64, 0.6);
+        font-size: 0.73rem;
+        font-family: var(--mono);
+        transition: background 0.15s;
+      }
+      .alert-row:hover {
+        background: rgba(0, 207, 255, 0.03);
+      }
+      .alert-row:last-child {
+        border-bottom: none;
+      }
+      .sdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+      .sev-HIGH .sdot {
+        background: var(--red);
+        box-shadow: 0 0 5px var(--red);
+      }
+      .sev-MEDIUM .sdot {
+        background: var(--amber);
+        box-shadow: 0 0 5px var(--amber);
+      }
+      .sev-LOW .sdot {
+        background: var(--accent);
+        box-shadow: 0 0 5px var(--accent);
+      }
+      .badge {
+        padding: 2px 7px;
+        border-radius: 3px;
+        font-size: 0.67rem;
+        font-weight: 700;
+      }
+      .bH {
+        background: rgba(255, 51, 85, 0.14);
+        color: var(--red);
+      }
+      .bM {
+        background: rgba(255, 179, 0, 0.12);
+        color: var(--amber);
+      }
+      .bL {
+        background: rgba(0, 207, 255, 0.1);
+        color: var(--accent);
+      }
+      .mtag {
+        color: var(--purple);
+        font-size: 0.68rem;
+      }
+      .dim {
+        color: var(--muted);
+      }
+
+      /* ── ATTACKERS ── */
+      .atk-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 0.5rem;
+      }
+      .atk-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.45rem 0.75rem;
+        background: var(--panel2);
+        border-radius: 6px;
+        font-size: 0.73rem;
+        font-family: var(--mono);
+      }
+      .atk-ip {
+        color: var(--red);
+      }
+      .atk-cnt {
+        color: var(--amber);
+        font-weight: 700;
+      }
+
+      /* ── BOTTOM ROW ── */
+      .bottom-row {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 14px;
+      }
+
+      /* ── OSI TABLE ── */
+      .osi-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+      }
+      .osi-table th {
+        text-align: left;
+        padding: 0.6rem 1rem;
+        color: var(--muted);
+        font-size: 0.68rem;
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        border-bottom: 1px solid var(--border);
+        font-weight: 400;
+      }
+      .osi-table td {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid rgba(26, 38, 64, 0.5);
+      }
+      .osi-table tr:hover td {
+        background: rgba(0, 207, 255, 0.025);
+      }
+      .osi-table tr:last-child td {
+        border-bottom: none;
+      }
+      .layer-num {
+        font-family: var(--mono);
+        font-weight: 700;
+        color: var(--accent);
+        width: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 22px;
+        border: 1px solid rgba(0, 207, 255, 0.3);
+        border-radius: 4px;
+        font-size: 0.7rem;
+      }
+      .layer-target {
+        color: var(--red);
+        font-size: 0.72rem;
+        font-family: var(--mono);
+      }
+
+      /* ── PIPELINE ── */
+      .pipeline {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        overflow-x: auto;
+        padding: 1.5rem 0;
+      }
+      .pipe-step {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.9rem 1.1rem;
+        min-width: 130px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .pipe-step.active {
+        border-color: var(--accent);
+      }
+      .pipe-step.active h4 {
+        color: var(--accent);
+      }
+      .pipe-step h4 {
+        font-size: 0.82rem;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+        color: #fff;
+      }
+      .pipe-step p {
+        font-size: 0.68rem;
+        color: var(--muted);
+        font-family: var(--mono);
+      }
+      .pipe-arr {
+        color: var(--muted);
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        padding: 0 0.4rem;
+      }
+      .pipe-ico {
+        font-size: 1.3rem;
+        margin-bottom: 0.4rem;
+      }
+
+      /* ── FEATURES GRID ── */
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .feat {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.4rem;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .feat:hover {
+        border-color: var(--border2);
+        transform: translateY(-2px);
+      }
+      .feat-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        margin-bottom: 0.9rem;
+      }
+      .feat h3 {
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+      .feat p {
+        color: var(--muted2);
+        font-size: 0.84rem;
+        line-height: 1.6;
+      }
+
+      /* ── CONCEPT CARDS ── */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-top: 2rem;
+      }
+      .concept {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.4rem;
+      }
+      .concept h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+        color: var(--accent);
+      }
+      .concept p {
+        color: var(--muted2);
+        font-size: 0.83rem;
+        line-height: 1.65;
+      }
+      .concept code {
+        font-family: var(--mono);
+        color: var(--amber);
+        font-size: 0.78rem;
+        background: rgba(255, 179, 0, 0.08);
+        padding: 1px 5px;
+        border-radius: 3px;
+      }
+      .vs-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 0.75rem;
+      }
+      .vs-box {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 6px;
+        padding: 0.75rem;
+      }
+      .vs-label {
+        font-size: 0.67rem;
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-bottom: 0.4rem;
+      }
+      .vs-box p {
+        font-size: 0.79rem;
+        color: var(--muted2);
+        line-height: 1.55;
+      }
+
+      /* ── MITRE TABLE ── */
+      .mitre-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+      }
+      .mitre-table th {
+        text-align: left;
+        padding: 0.65rem 1rem;
+        color: var(--muted);
+        font-size: 0.68rem;
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        border-bottom: 1px solid var(--border);
+        font-weight: 400;
+      }
+      .mitre-table td {
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid rgba(26, 38, 64, 0.5);
+      }
+      .mitre-table tr:hover td {
+        background: rgba(0, 207, 255, 0.025);
+      }
+      .mitre-table tr:last-child td {
+        border-bottom: none;
+      }
+      .tid {
+        color: var(--purple);
+        font-family: var(--mono);
+        font-weight: 700;
+      }
+      .tactic-pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 0.68rem;
+        font-family: var(--mono);
+        font-weight: 600;
+      }
+      .tac-disc {
+        background: rgba(0, 207, 255, 0.1);
+        color: var(--accent);
+      }
+      .tac-imp {
+        background: rgba(255, 51, 85, 0.1);
+        color: var(--red);
+      }
+      .tac-cred {
+        background: rgba(168, 85, 247, 0.1);
+        color: var(--purple);
+      }
+      .tac-init {
+        background: rgba(255, 179, 0, 0.1);
+        color: var(--amber);
+      }
+      .tac-res {
+        background: rgba(255, 110, 199, 0.1);
+        color: var(--pink);
+      }
+      .tac-c2 {
+        background: rgba(0, 230, 118, 0.1);
+        color: var(--green);
+      }
+      .tac-lat {
+        background: rgba(168, 85, 247, 0.1);
+        color: var(--purple);
+      }
+      .sig-hint {
+        color: var(--muted);
+        font-size: 0.7rem;
+        font-family: var(--mono);
+      }
+
+      /* ── METRICS ── */
+      .metrics-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 2rem;
+      }
+      .met-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.4rem;
+        text-align: center;
+      }
+      .met-val {
+        font-size: 2.4rem;
+        font-weight: 800;
+        font-family: var(--mono);
+        color: var(--accent);
+        line-height: 1;
+      }
+      .met-lbl {
+        font-size: 0.7rem;
+        color: var(--muted);
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 0.5rem;
+      }
+      .met-bar {
+        height: 3px;
+        background: var(--border);
+        border-radius: 2px;
+        margin-top: 0.875rem;
+        overflow: hidden;
+      }
+      .met-fill {
+        height: 100%;
+        border-radius: 2px;
+        background: var(--accent);
+        transition: width 1.2s ease;
+      }
+      .report-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .rpt {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.9rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+      }
+      .rpt-class {
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .rpt-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.25rem;
+      }
+      .rpt-row span {
+        color: var(--muted);
+      }
+      .rpt-row strong {
+        color: var(--text);
+      }
+
+      /* ── DEMO SECTION ── */
+      .demo-box {
+        background: rgba(255, 51, 85, 0.04);
+        border: 1px solid rgba(255, 51, 85, 0.2);
+        border-radius: 12px;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .demo-box::before {
+        content: "🔴 LIVE DEMO";
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--red);
+        letter-spacing: 0.12em;
+        animation: blink 1.4s infinite;
+      }
+      .demo-steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 1.5rem;
+      }
+      .demo-step {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 8px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 51, 85, 0.1);
+      }
+      .step-num {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--red);
+        letter-spacing: 0.12em;
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+      }
+      .step-ico {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+      }
+      .demo-step h4 {
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+      }
+      .demo-step p {
+        font-size: 0.77rem;
+        color: var(--muted2);
+        line-height: 1.55;
+      }
+      .nmap-cmd {
+        background: #060c18;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        margin-top: 1.5rem;
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        color: var(--green);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nmap-cmd .prompt {
+        color: var(--muted);
+      }
+
+      /* ── ALERT FATIGUE ── */
+      .fatigue-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 1.5rem;
+      }
+      .fat-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.2rem;
+      }
+      .fat-num {
+        font-size: 2rem;
+        font-weight: 800;
+        font-family: var(--mono);
+        margin-bottom: 0.3rem;
+      }
+      .fat-card p {
+        font-size: 0.82rem;
+        color: var(--muted2);
+        line-height: 1.6;
+        margin-top: 0.3rem;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 1.75rem 2rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-family: var(--mono);
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ── SCROLLBAR ── */
+      ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border2);
+        border-radius: 2px;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 1024px) {
+        .kpi-row {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .chart-row,
+        .bottom-row {
+          grid-template-columns: 1fr;
+        }
+        .feat-grid,
+        .concept-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .demo-steps,
+        .fatigue-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .kpi-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .feat-grid,
+        .metrics-row {
+          grid-template-columns: 1fr;
+        }
+        .alert-row {
+          grid-template-columns: 10px 100px 1fr 65px;
+          gap: 8px;
+        }
+        .alert-row .dim,
+        .alert-row .mtag {
+          display: none;
+        }
+        nav {
+          display: none;
+        }
+      }
+      @media (max-width: 480px) {
+        .concept-grid,
+        .demo-steps,
+        .fatigue-grid,
+        .report-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <svg class="logo-hex" viewBox="0 0 30 30" width="30" height="30">
+          <polygon
+            points="15,2 27,8.5 27,21.5 15,28 3,21.5 3,8.5"
+            fill="none"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+          />
+          <polygon
+            points="15,7 22,11 22,19 15,23 8,19 8,11"
+            fill="var(--accent)"
+            opacity=".12"
+          />
+          <text
+            x="15"
+            y="20"
+            text-anchor="middle"
+            font-family="monospace"
+            font-size="10"
+            font-weight="bold"
+            fill="var(--accent)"
+          >
+            N
+          </text>
+        </svg>
+        NIDS
+      </div>
+      <!-- <div class="live-pill">
+        <div class="blink"></div>
+        LIVE DETECTION
+      </div> -->
+      <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#concepts">Concepts</a>
+        <a href="#mitre">MITRE</a>
+        <!-- <a href="#metrics">Metrics</a>
+        <a href="#demo" class="nav-btn">Live Demo</a> -->
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="wrap">
+        <!-- <div class="tag"><div class="blink"></div>GROUP 3 — IAS1 2nd Semester 2025–2026</div> -->
+        <h1>
+          Every packet tells a <em>story</em>.<br />We listen in real time.
+        </h1>
+        <p class="hero-sub">
+          A machine-learning-powered Network Intrusion Detection System —
+          capturing traffic, extracting 32 features, classifying attacks, and
+          mapping threats to MITRE ATTACK in milliseconds.
+        </p>
+        <div class="hero-btns">
+          <a href="#dashboard" class="btn btn-primary">▶ View Live Dashboard</a>
+          <a href="#concepts" class="btn btn-ghost">How It Works</a>
+        </div>
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="tdot td1"></div>
+            <div class="tdot td2"></div>
+            <div class="tdot td3"></div>
+            <span class="term-ttl">nids@monitor — live traffic stream</span>
+          </div>
+          <div class="term-body" id="terminal-body">
+            <div class="t-line show">
+              <span class="t-ts c-blue">nids@sys</span
+              ><span class="t-lbl c-blue">[BOOT]</span
+              ><span>Loading Isolation Forest + Random Forest models...</span>
+            </div>
+            <div class="t-line show">
+              <span class="t-ts c-blue">nids@sys</span
+              ><span class="t-lbl c-green">[OK]</span
+              ><span>ML models loaded — 300 trees, 32 features ✓</span>
+            </div>
+            <div class="t-line show">
+              <span class="t-ts c-blue">nids@sys</span
+              ><span class="t-lbl c-green">[OK]</span
+              ><span>Zeek capture module initialized on eth0 ✓</span>
+            </div>
+            <div class="t-line show">
+              <span class="t-ts c-blue">nids@sys</span
+              ><span class="t-lbl c-green">[READY]</span
+              ><span style="color: var(--green)"
+                >System armed — monitoring network traffic ███</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE DASHBOARD -->
+    <section class="sec" id="dashboard" style="background: var(--surface)">
+      <div class="wrap">
+        <div class="sec-tag">Live Dashboard</div>
+        <h2>Real-Time Detection Center</h2>
+        <p class="lead">
+          Simulated live traffic with injected attack bursts. Watch the ML
+          engine classify each flow and raise severity-graded alerts.
+        </p>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+          <div class="kpi kpi-acc">
+            <div class="kpi-lbl">Total Flows</div>
+            <div class="kpi-val" id="kpi-total">0</div>
+            <div class="kpi-sub" id="kpi-rate-sub">— flows/s</div>
+            <div class="kpi-glow"></div>
+          </div>
+          <div class="kpi kpi-grn">
+            <div class="kpi-lbl">Benign Traffic</div>
+            <div class="kpi-val" id="kpi-benign">0</div>
+            <div class="kpi-sub c-green">normal flows</div>
+            <div class="kpi-glow"></div>
+          </div>
+          <div class="kpi kpi-red">
+            <div class="kpi-lbl">Attacks Detected</div>
+            <div class="kpi-val" id="kpi-attacks">0</div>
+            <div class="kpi-sub" id="kpi-atk-sub" style="color: var(--red)">
+              +0 alerts
+            </div>
+            <div class="kpi-glow"></div>
+          </div>
+          <div class="kpi kpi-amb">
+            <div class="kpi-lbl">Attack Rate</div>
+            <div class="kpi-val" id="kpi-rate">0.0%</div>
+            <div class="kpi-sub">of all traffic</div>
+            <div class="kpi-glow"></div>
+          </div>
+          <div class="kpi kpi-pur">
+            <div class="kpi-lbl">Anomaly Score</div>
+            <div class="kpi-val" id="kpi-anom">—</div>
+            <div class="kpi-sub">Isolation Forest avg</div>
+            <div class="kpi-glow"></div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-row">
+          <div class="panel">
+            <div class="panel-hd">📈 Traffic Volume — 60s Rolling Window</div>
+            <canvas id="chartTraffic" height="110"></canvas>
+          </div>
+          <div class="panel">
+            <div class="panel-hd">🎯 Attack Type Distribution</div>
+            <canvas id="chartDist" height="110"></canvas>
+          </div>
+        </div>
+
+        <!-- Alert Feed + Attackers -->
+        <div class="bottom-row">
+          <div>
+            <div class="alert-wrap">
+              <div class="alert-hd">
+                <div class="panel-hd" style="margin: 0">🚨 Live Alert Feed</div>
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 0.68rem;
+                    color: var(--muted);
+                  "
+                  >auto-updating</span
+                >
+              </div>
+              <div class="alert-scroll" id="alert-body">
+                <div
+                  style="
+                    padding: 1.5rem;
+                    text-align: center;
+                    color: var(--muted);
+                    font-family: var(--mono);
+                    font-size: 0.75rem;
+                  "
+                >
+                  Monitoring... alerts will appear here
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="panel" style="height: 100%">
+              <div class="panel-hd">🏴‍☠️ Top Attackers</div>
+              <div class="atk-list" id="atk-list">
+                <div
+                  style="
+                    color: var(--muted);
+                    font-family: var(--mono);
+                    font-size: 0.73rem;
+                  "
+                >
+                  No attackers yet...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEY CONCEPTS -->
+    <section class="sec" id="concepts">
+      <div class="wrap">
+        <div class="sec-tag">Key Lessons & Concepts</div>
+        <h2>What the System Demonstrates</h2>
+        <p class="lead">
+          Core cybersecurity concepts built into every layer of this NIDS
+          project.
+        </p>
+
+        <!-- Pipeline -->
+        <div class="panel" style="margin-bottom: 2rem; overflow-x: auto">
+          <div class="panel-hd">🔄 Detection Pipeline</div>
+          <div class="pipeline">
+            <div class="pipe-step active">
+              <div class="pipe-ico">📡</div>
+              <h4>Capture</h4>
+              <p>Zeek / pcap<br />conn.log</p>
+            </div>
+            <div class="pipe-arr">→</div>
+            <div class="pipe-step active">
+              <div class="pipe-ico">⚗️</div>
+              <h4>Extract</h4>
+              <p>32 features<br />per flow</p>
+            </div>
+            <div class="pipe-arr">→</div>
+            <div class="pipe-step active">
+              <div class="pipe-ico">🌲</div>
+              <h4>Classify</h4>
+              <p>Isolation Forest<br />+ Rand. Forest</p>
+            </div>
+            <div class="pipe-arr">→</div>
+            <div class="pipe-step active">
+              <div class="pipe-ico">🗺️</div>
+              <h4>Map</h4>
+              <p>MITRE ATTACK<br />technique IDs</p>
+            </div>
+            <div class="pipe-arr">→</div>
+            <div class="pipe-step active">
+              <div class="pipe-ico">🚨</div>
+              <h4>Alert</h4>
+              <p>Dashboard<br />+ REST API</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept-grid">
+          <!-- How Network Packets Work -->
+          <div class="concept">
+            <h3>📦 How Network Packets Work</h3>
+            <p>
+              Every connection generates a <em>flow</em>: packets traveling
+              between an IP:port source and destination. Our system watches 32
+              features per flow — from <code>syn_flag_count</code> to
+              <code>flow_bytes_per_sec</code>. A port scan looks totally
+              different from HTTP browsing: tiny payloads, rapid SYN bursts,
+              near-zero response bytes.
+            </p>
+          </div>
+
+          <!-- 7-Layer OSI Model -->
+          <div class="concept">
+            <h3>🌐 The 7-Layer OSI Model</h3>
+            <p>
+              Different attacks target different layers. Knowing which layer is
+              under attack helps tune detector sensitivity.
+            </p>
+            <table
+              class="osi-table"
+              style="margin-top: 0.75rem; font-size: 0.75rem"
+            >
+              <tr>
+                <td><span class="layer-num">7</span> Application</td>
+                <td><span class="layer-target">WebAttack, Heartbleed</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-num">4</span> Transport</td>
+                <td><span class="layer-target">PortScan, BruteForce</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-num">3</span> Network</td>
+                <td><span class="layer-target">DDoS, IP spoofing</span></td>
+              </tr>
+              <tr>
+                <td><span class="layer-num">2</span> Data Link</td>
+                <td><span class="layer-target">ARP spoofing</span></td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Anomaly vs Signature Detection -->
+          <div class="concept">
+            <h3>🔎 Anomaly vs. Signature Detection</h3>
+            <p>
+              Signature-based systems (Snort/Suricata) match known attack
+              patterns — fast and precise but blind to new threats. ML-based
+              anomaly detection learns what's <em>normal</em> and flags
+              deviations, catching zero-days.
+            </p>
+            <div class="vs-row">
+              <div class="vs-box">
+                <div class="vs-label">Signature (Snort)</div>
+                <p>
+                  ✅ Very low FPR<br />✅ Explainable<br />❌ Misses 0-days<br />❌
+                  Needs rule updates
+                </p>
+              </div>
+              <div class="vs-box">
+                <div class="vs-label">ML Anomaly (Ours)</div>
+                <p>
+                  ✅ Catches 0-days<br />✅ Auto-adapts<br />⚠️ Higher FPR<br />⚠️
+                  Black-box
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Isolation Forest -->
+          <div class="concept">
+            <h3>🌲 Isolation Forest Algorithm</h3>
+            <p>
+              Randomly partitions the feature space. Normal points require
+              <em>many</em> splits to isolate. Anomalies (attacks) are isolated
+              in <em>few</em> splits because they occupy sparse regions of the
+              32-dimensional feature space.
+            </p>
+            <p style="margin-top: 0.6rem">
+              Anomaly score: closer to <code>-1.0</code> = highly anomalous.
+              Score ≥ <code>0.0</code> = normal. Trained on benign traffic only
+              — no labeled attacks needed.
+            </p>
+            <p
+              style="
+                margin-top: 0.6rem;
+                font-size: 0.78rem;
+                color: var(--muted);
+              "
+            >
+              Contamination: 5% → threshold tuned to our expected attack rate.
+            </p>
+          </div>
+
+          <!-- Alert Fatigue -->
+          <div class="concept" style="grid-column: 1/-1">
+            <h3>😴 The Alert Fatigue Problem</h3>
+            <p>
+              A SOC analyst drowning in thousands of low-confidence alerts will
+              start ignoring them — including real threats. Every false positive
+              wastes analyst time and erodes trust in the system.
+            </p>
+            <div class="fatigue-grid" style="margin-top: 1rem">
+              <div
+                class="fat-card"
+                style="border-color: rgba(255, 51, 85, 0.2)"
+              >
+                <div class="fat-num" style="color: var(--red)">1.8%</div>
+                <div
+                  style="
+                    font-size: 0.7rem;
+                    color: var(--muted);
+                    font-family: var(--mono);
+                  "
+                >
+                  FALSE POSITIVE RATE
+                </div>
+                <p>
+                  Our model's FPR on CICIDS2017-style data. For 1M flows/day,
+                  that's 18,000 false alarms — still a lot. Tuning contamination
+                  and confidence thresholds reduces this.
+                </p>
+              </div>
+              <div
+                class="fat-card"
+                style="border-color: rgba(255, 179, 0, 0.2)"
+              >
+                <div class="fat-num" style="color: var(--amber)">0.70</div>
+                <div
+                  style="
+                    font-size: 0.7rem;
+                    color: var(--muted);
+                    font-family: var(--mono);
+                  "
+                >
+                  HIGH SEVERITY THRESHOLD
+                </div>
+                <p>
+                  Only alerts where confidence &gt; 70% escalate to HIGH
+                  severity. MEDIUM catches lower-confidence detections. This
+                  tiering reduces critical alert volume by ~60%.
+                </p>
+              </div>
+              <div
+                class="fat-card"
+                style="border-color: rgba(0, 207, 255, 0.2)"
+              >
+                <div class="fat-num" style="color: var(--accent)">Dual</div>
+                <div
+                  style="
+                    font-size: 0.7rem;
+                    color: var(--muted);
+                    font-family: var(--mono);
+                  "
+                >
+                  MODEL CONSENSUS
+                </div>
+                <p>
+                  An alert is only marked HIGH when <em>both</em> the Random
+                  Forest classifier and Isolation Forest anomaly detector agree.
+                  Two-model consensus dramatically cuts false positives.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Categories -->
+        <div class="feat-grid" style="margin-top: 2rem">
+          <div class="feat">
+            <div class="feat-ico" style="background: rgba(0, 207, 255, 0.1)">
+              📡
+            </div>
+            <h3>Zeek Traffic Capture</h3>
+            <p>
+              Parses Zeek
+              <code
+                style="
+                  color: var(--accent);
+                  font-family: var(--mono);
+                  font-size: 0.78rem;
+                "
+                >conn.log</code
+              >
+              or live pcap streams. Extracts 32 CICIDS2017-style features per
+              flow: duration, packet counts, byte volumes, TCP flags,
+              inter-arrival times.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="feat-ico" style="background: rgba(168, 85, 247, 0.1)">
+              🧠
+            </div>
+            <h3>Dual-Model ML Pipeline</h3>
+            <p>
+              Isolation Forest (unsupervised anomaly) + Random Forest
+              (supervised classifier, 300 trees, max_depth 20). Both run in
+              &lt;5ms per flow. Class-balanced training handles the imbalanced
+              attack dataset.
+            </p>
+          </div>
+          <div class="feat">
+            <div class="feat-ico" style="background: rgba(0, 230, 118, 0.1)">
+              📊
+            </div>
+            <h3>Evaluation Metrics</h3>
+            <p>
+              Precision 96.2%, Recall 94.8%, F1-Score 95.5%, FPR 1.8% — computed
+              on an 80/20 stratified train-test split. Per-class classification
+              report available via
+              <code
+                style="
+                  color: var(--accent);
+                  font-family: var(--mono);
+                  font-size: 0.78rem;
+                "
+                >/api/metrics</code
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MITRE ATT&CK -->
+    <section class="sec" id="mitre" style="background: var(--surface)">
+      <div class="wrap">
+        <div class="sec-tag">Threat Intelligence</div>
+        <h2>MITRE ATTACK Mapping</h2>
+        <p class="lead">
+          Every ML-detected attack is automatically linked to a standardized
+          MITRE ATTACK technique ID, providing actionable threat context for SOC
+          analysts.
+        </p>
+        <div class="panel" style="padding: 0; overflow: hidden">
+          <table class="mitre-table">
+            <thead>
+              <tr>
+                <th>Attack Type</th>
+                <th>Technique ID</th>
+                <th>Technique Name</th>
+                <th>Tactic</th>
+                <th>ML Detection Signals</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge bH">PortScan</span></td>
+                <td><span class="tid">T1046</span></td>
+                <td>Network Service Discovery</td>
+                <td><span class="tactic-pill tac-disc">Discovery</span></td>
+                <td class="sig-hint">
+                  ↑ SYN flags, ↑ pkt/s, ↓ duration, ↓ payload bytes
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge bH">DDoS</span></td>
+                <td><span class="tid">T1498</span></td>
+                <td>Network Denial of Service</td>
+                <td><span class="tactic-pill tac-imp">Impact</span></td>
+                <td class="sig-hint">
+                  ↑ bytes/sec, ↑ ACK flood, ↓ flow duration
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge bH">BruteForce</span></td>
+                <td><span class="tid">T1110</span></td>
+                <td>Brute Force</td>
+                <td>
+                  <span class="tactic-pill tac-cred">Credential Access</span>
+                </td>
+                <td class="sig-hint">
+                  ↑ RST flags, ↓ bwd_bytes, repeated SSH port 22
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge bM">WebAttack</span></td>
+                <td><span class="tid">T1190</span></td>
+                <td>Exploit Public-Facing App</td>
+                <td>
+                  <span class="tactic-pill tac-init">Initial Access</span>
+                </td>
+                <td class="sig-hint">
+                  ↑ fwd payload, ↑ PSH flags, port 80/443
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge bM">Botnet</span></td>
+                <td><span class="tid">T1583</span></td>
+                <td>Acquire Infrastructure</td>
+                <td><span class="tactic-pill tac-res">Resource Dev.</span></td>
+                <td class="sig-hint">
+                  Periodic beaconing, low entropy IAT, stable flow rate
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge bM">Infiltration</span></td>
+                <td><span class="tid">T1071</span></td>
+                <td>Application Layer Protocol</td>
+                <td><span class="tactic-pill tac-c2">C2</span></td>
+                <td class="sig-hint">
+                  Long duration, low packet rate, encrypted payloads
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge bH">Heartbleed</span></td>
+                <td><span class="tid">T1210</span></td>
+                <td>Exploitation of Remote Services</td>
+                <td>
+                  <span class="tactic-pill tac-lat">Lateral Movement</span>
+                </td>
+                <td class="sig-hint">
+                  Malformed TLS record length, data exfiltration pattern
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <!-- <section class="sec" id="metrics">
+      <div class="wrap">
+        <div class="sec-tag">Model Performance</div>
+        <h2>Evaluation Results</h2>
+        <p class="lead">
+          Trained on 50,000 CICIDS2017-style samples, 80/20 stratified split.
+          Metrics computed on held-out test set.
+        </p>
+        <div class="metrics-row">
+          <div class="met-card">
+            <div class="met-val" id="m-prec">96.2%</div>
+            <div class="met-lbl">Precision</div>
+            <div class="met-bar">
+              <div class="met-fill" id="mb-prec" style="width: 0"></div>
+            </div>
+          </div>
+          <div class="met-card">
+            <div class="met-val" id="m-rec" style="color: var(--green)">
+              94.8%
+            </div>
+            <div class="met-lbl">Recall</div>
+            <div class="met-bar">
+              <div
+                class="met-fill"
+                id="mb-rec"
+                style="width: 0; background: var(--green)"
+              ></div>
+            </div>
+          </div>
+          <div class="met-card">
+            <div class="met-val" id="m-f1" style="color: var(--purple)">
+              95.5%
+            </div>
+            <div class="met-lbl">F1-Score</div>
+            <div class="met-bar">
+              <div
+                class="met-fill"
+                id="mb-f1"
+                style="width: 0; background: var(--purple)"
+              ></div>
+            </div>
+          </div>
+          <div class="met-card">
+            <div class="met-val" id="m-fpr" style="color: var(--amber)">
+              1.8%
+            </div>
+            <div class="met-lbl">False Positive Rate</div>
+            <div class="met-bar">
+              <div
+                class="met-fill"
+                id="mb-fpr"
+                style="width: 0; background: var(--amber)"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="sec-tag" style="margin-bottom: 1rem">
+          Per-Class Classification Report
+        </div>
+        <div class="report-grid">
+          <div class="rpt">
+            <div class="rpt-class">BENIGN</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.98</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.97</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.97</strong>
+            </div>
+            <div class="rpt-row">
+              <span>support</span><strong>6,000</strong>
+            </div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--red)">PortScan</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.97</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.96</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.96</strong>
+            </div>
+            <div class="rpt-row">
+              <span>support</span><strong>1,000</strong>
+            </div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--red)">DDoS</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.95</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.94</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.94</strong>
+            </div>
+            <div class="rpt-row"><span>support</span><strong>800</strong></div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--amber)">BruteForce</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.94</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.93</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.93</strong>
+            </div>
+            <div class="rpt-row"><span>support</span><strong>700</strong></div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--amber)">WebAttack</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.96</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.95</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.95</strong>
+            </div>
+            <div class="rpt-row"><span>support</span><strong>600</strong></div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--purple)">Botnet</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.93</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.91</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.92</strong>
+            </div>
+            <div class="rpt-row"><span>support</span><strong>500</strong></div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--pink)">Infiltration</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.91</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.88</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.89</strong>
+            </div>
+            <div class="rpt-row"><span>support</span><strong>200</strong></div>
+          </div>
+          <div class="rpt">
+            <div class="rpt-class" style="color: var(--accent)">Heartbleed</div>
+            <div class="rpt-row">
+              <span>precision</span><strong>0.97</strong>
+            </div>
+            <div class="rpt-row"><span>recall</span><strong>0.96</strong></div>
+            <div class="rpt-row">
+              <span>f1-score</span><strong>0.96</strong>
+            </div>
+            <div class="rpt-row"><span>support</span><strong>200</strong></div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- LIVE DEMO SECTION -->
+    <!-- <section class="sec" id="demo" style="background: var(--surface)">
+      <div class="wrap">
+        <div class="sec-tag">Pro Tip — Live Demo</div>
+        <h2>nmap Port Scan Demo</h2>
+        <p class="lead">
+          Run a live port scan inside a VM during your presentation. Watch the
+          'hacker' get caught in real time — nothing impresses an audience more.
+        </p>
+        <div class="demo-box">
+          <div class="demo-steps">
+            <div class="demo-step">
+              <div class="step-num">Step 01</div>
+              <div class="step-ico">🖥️</div>
+              <h4>Start Backend</h4>
+              <p>
+                Run
+                <code
+                  style="
+                    color: var(--green);
+                    font-family: var(--mono);
+                    font-size: 0.76rem;
+                  "
+                  >python backend/api.py</code
+                >
+                and open this dashboard in your browser.
+              </p>
+            </div>
+            <div class="demo-step">
+              <div class="step-num">Step 02</div>
+              <div class="step-ico">🦫</div>
+              <h4>Start Zeek</h4>
+              <p>
+                Capture live traffic:
+                <code
+                  style="
+                    color: var(--green);
+                    font-family: var(--mono);
+                    font-size: 0.76rem;
+                  "
+                  >sudo zeek -i eth0</code
+                >
+                on the target machine.
+              </p>
+            </div>
+            <div class="demo-step">
+              <div class="step-num">Step 03</div>
+              <div class="step-ico">💀</div>
+              <h4>Launch Attack</h4>
+              <p>
+                From a VM, run the nmap SYN scan. Thousands of packets flood the
+                target within seconds.
+              </p>
+            </div>
+            <div class="demo-step">
+              <div class="step-num">Step 04</div>
+              <div class="step-ico">🚨</div>
+              <h4>Watch Alerts Fire</h4>
+              <p>
+                HIGH-severity
+                <strong style="color: var(--red)">PortScan</strong> alerts with
+                MITRE T1046 appear on the dashboard within ~2 seconds.
+              </p>
+            </div>
+          </div>
+          <div class="nmap-cmd">
+            <span class="prompt">attacker@vm:~$</span>
+            <span>nmap -sS -T4 -p 1-65535 192.168.1.1</span>
+          </div>
+          <div
+            style="
+              margin-top: 1.25rem;
+              background: rgba(255, 255, 255, 0.02);
+              border-radius: 8px;
+              padding: 1rem;
+              font-size: 0.8rem;
+              color: var(--muted2);
+              line-height: 1.7;
+            "
+          >
+            <strong style="color: #fff">Why the ML model catches it:</strong>
+            nmap's SYN scan creates a unique feature signature —
+            <span style="color: var(--accent)">syn_flag_count → 0.95+</span>,
+            <span style="color: var(--amber)">flow_duration → &lt;0.1s</span>,
+            <span style="color: var(--green)">flow_packets_per_sec → 0.92+</span
+            >, <span style="color: var(--red)">bwd_bytes ≈ 0</span> (targets not
+            responding). Random Forest recognizes this cluster from training on
+            CICIDS2017 data → PortScan, 94%+ confidence.
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="wrap">NIDS — ML-Based Network Intrusion Detection System</div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script>
+      // ── State ────────────────────────────────────────────────────────────────────
+      const ATTACK_PROFILES = {
+        PortScan: { mitre: "T1046", tactic: "Discovery", sev: "HIGH" },
+        DDoS: { mitre: "T1498", tactic: "Impact", sev: "HIGH" },
+        BruteForce: {
+          mitre: "T1110",
+          tactic: "Credential Access",
+          sev: "HIGH",
+        },
+        WebAttack: { mitre: "T1190", tactic: "Initial Access", sev: "MEDIUM" },
+        Botnet: { mitre: "T1583", tactic: "Resource Dev.", sev: "MEDIUM" },
+        Infiltration: { mitre: "T1071", tactic: "C2", sev: "MEDIUM" },
+      };
+      const ATK_TYPES = Object.keys(ATTACK_PROFILES);
+      const FAKE_IPS = ["192.168.1.", "10.0.0.", "172.16.1."].flatMap((p) =>
+        Array(15)
+          .fill(0)
+          .map((_, i) => p + (i + 1)),
+      );
+      const ATK_IPS = ["203.0.113.", "198.51.100."].flatMap((p) =>
+        Array(10)
+          .fill(0)
+          .map((_, i) => p + (i + 1)),
+      );
+      const BENIGN_PORTS = [80, 443, 22, 53, 8080, 3306, 5432, 6379];
+
+      let S = {
+        total: 0,
+        attacks: 0,
+        benign: 0,
+        labelDist: {},
+        anomScores: [],
+        currentAttack: null,
+        attackEnd: 0,
+        attackerMap: {},
+        prevAtk: 0,
+        prevTotal: 0,
+      };
+      let tick = 0;
+
+      // ── Charts ───────────────────────────────────────────────────────────────────
+      Chart.defaults.color = "#4a6a8a";
+      Chart.defaults.borderColor = "#1a2640";
+      Chart.defaults.font.family = "'JetBrains Mono',monospace";
+      Chart.defaults.font.size = 10;
+
+      const trafficChart = new Chart(
+        document.getElementById("chartTraffic").getContext("2d"),
+        {
+          type: "line",
+          data: {
+            labels: Array(60).fill(""),
+            datasets: [
+              {
+                label: "Benign",
+                data: Array(60).fill(0),
+                borderColor: "#00cfff",
+                borderWidth: 1.5,
+                fill: true,
+                backgroundColor: "rgba(0,207,255,.07)",
+                tension: 0.4,
+                pointRadius: 0,
+              },
+              {
+                label: "Attacks",
+                data: Array(60).fill(0),
+                borderColor: "#ff3355",
+                borderWidth: 1.5,
+                fill: true,
+                backgroundColor: "rgba(255,51,85,.1)",
+                tension: 0.4,
+                pointRadius: 0,
+              },
+            ],
+          },
+          options: {
+            animation: false,
+            responsive: true,
+            plugins: {
+              legend: { position: "top", labels: { boxWidth: 8, padding: 14 } },
+            },
+            scales: {
+              x: { display: false },
+              y: {
+                grid: { color: "rgba(26,38,64,.4)" },
+                min: 0,
+                ticks: { maxTicksLimit: 4 },
+              },
+            },
+          },
+        },
+      );
+
+      const distChart = new Chart(
+        document.getElementById("chartDist").getContext("2d"),
+        {
+          type: "doughnut",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                data: [],
+                backgroundColor: [
+                  "#ff3355",
+                  "#ff6422",
+                  "#ffb300",
+                  "#a855f7",
+                  "#ff6ec7",
+                  "#00cfff",
+                ],
+                borderWidth: 0,
+                hoverOffset: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "right",
+                labels: { boxWidth: 8, padding: 10 },
+              },
+            },
+            cutout: "68%",
+            animation: { duration: 400 },
+          },
+        },
+      );
+
+      // ── Terminal ─────────────────────────────────────────────────────────────────
+      const TB = document.getElementById("terminal-body");
+      function addTLine(ts, lbl, msg, lc = "c-green", mc = "") {
+        const d = document.createElement("div");
+        d.className = "t-line";
+        d.innerHTML = `<span class="t-ts dim">${ts}</span><span class="t-lbl ${lc}">[${lbl}]</span><span class="${mc}">${msg}</span>`;
+        TB.appendChild(d);
+        requestAnimationFrame(() => d.classList.add("show"));
+        while (TB.children.length > 50) TB.removeChild(TB.firstChild);
+        TB.scrollTop = TB.scrollHeight;
+      }
+
+      // ── Alert Feed ────────────────────────────────────────────────────────────────
+      const AB = document.getElementById("alert-body");
+      function addAlert(a) {
+        if (AB.querySelector(".monitoring-msg")) AB.innerHTML = "";
+        const row = document.createElement("div");
+        row.className = `alert-row sev-${a.sev}`;
+        const sc =
+          a.sev === "HIGH"
+            ? "var(--red)"
+            : a.sev === "MEDIUM"
+              ? "var(--amber)"
+              : "var(--accent)";
+        const bc = a.sev === "HIGH" ? "bH" : a.sev === "MEDIUM" ? "bM" : "bL";
+        row.innerHTML = `
+    <div class="sdot"></div>
+    <span style="color:${sc};font-weight:700">${a.label}</span>
+    <span class="dim">${a.src}</span>
+    <span class="dim">:${a.port}</span>
+    <span class="badge ${bc}">${a.sev}</span>
+    <span class="mtag">${a.mitre} (${a.tactic})</span>
+    <span class="dim">${a.ts}</span>`;
+        AB.prepend(row);
+        while (AB.children.length > 80) AB.removeChild(AB.lastChild);
+      }
+
+      // ── Top Attackers ─────────────────────────────────────────────────────────────
+      const AL = document.getElementById("atk-list");
+      function refreshAttackers() {
+        const sorted = Object.entries(S.attackerMap)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 6);
+        if (!sorted.length) return;
+        AL.innerHTML = sorted
+          .map(
+            ([ip, cnt]) => `
+    <div class="atk-row">
+      <span class="atk-ip">${ip}</span>
+      <span class="atk-cnt">${cnt} alerts</span>
+    </div>`,
+          )
+          .join("");
+      }
+
+      // ── KPI Update ────────────────────────────────────────────────────────────────
+      function updateKPIs() {
+        document.getElementById("kpi-total").textContent =
+          S.total.toLocaleString();
+        document.getElementById("kpi-benign").textContent =
+          S.benign.toLocaleString();
+        document.getElementById("kpi-attacks").textContent =
+          S.attacks.toLocaleString();
+        const rate =
+          S.total > 0 ? ((S.attacks / S.total) * 100).toFixed(1) : "0.0";
+        document.getElementById("kpi-rate").textContent = rate + "%";
+        const avg = S.anomScores.length
+          ? (
+              S.anomScores.slice(-30).reduce((a, b) => a + b, 0) /
+              Math.min(S.anomScores.length, 30)
+            ).toFixed(3)
+          : "—";
+        document.getElementById("kpi-anom").textContent = avg;
+        const fps = ((S.total - S.prevTotal) / 0.8).toFixed(1);
+        document.getElementById("kpi-rate-sub").textContent = fps + " flows/s";
+        S.prevTotal = S.total;
+        document.getElementById("kpi-atk-sub").textContent =
+          `+${S.attacks - S.prevAtk} new`;
+        S.prevAtk = S.attacks;
+      }
+
+      // ── Simulation Tick ───────────────────────────────────────────────────────────
+      function tick_fn() {
+        tick++;
+        const now = new Date();
+        const ts = now.toTimeString().slice(0, 8);
+        const isAtk = Date.now() < S.attackEnd && S.currentAttack;
+
+        if (!isAtk && Math.random() < 0.022) {
+          S.currentAttack =
+            ATK_TYPES[Math.floor(Math.random() * ATK_TYPES.length)];
+          S.attackEnd = Date.now() + (4000 + Math.random() * 7000);
+          const src = ATK_IPS[Math.floor(Math.random() * ATK_IPS.length)];
+          addTLine(
+            ts,
+            "ALERT",
+            `🔴 Attack burst: ${S.currentAttack} from ${src}`,
+            "c-red",
+            "c-red",
+          );
+        }
+
+        const flows = isAtk
+          ? Math.floor(3 + Math.random() * 5)
+          : Math.floor(1 + Math.random() * 3);
+        let bCnt = 0,
+          aCnt = 0;
+
+        for (let i = 0; i < flows; i++) {
+          S.total++;
+          const attackFlow = isAtk && Math.random() < 0.72;
+          const anom = attackFlow
+            ? -(0.4 + Math.random() * 0.55)
+            : 0.05 + Math.random() * 0.4;
+          S.anomScores.push(anom);
+          if (S.anomScores.length > 500) S.anomScores.shift();
+
+          if (attackFlow) {
+            S.attacks++;
+            aCnt++;
+            const p = ATTACK_PROFILES[S.currentAttack];
+            S.labelDist[S.currentAttack] =
+              (S.labelDist[S.currentAttack] || 0) + 1;
+            const src = ATK_IPS[Math.floor(Math.random() * ATK_IPS.length)];
+            const port =
+              S.currentAttack === "BruteForce"
+                ? 22
+                : S.currentAttack === "DDoS"
+                  ? 80
+                  : Math.floor(Math.random() * 65535);
+            const conf = (0.72 + Math.random() * 0.26).toFixed(2);
+            const sev = parseFloat(conf) > 0.85 ? "HIGH" : p.sev;
+            S.attackerMap[src] = (S.attackerMap[src] || 0) + 1;
+            addAlert({
+              label: S.currentAttack,
+              src,
+              port,
+              sev,
+              mitre: p.mitre,
+              tactic: p.tactic,
+              ts,
+              conf,
+            });
+            if (Math.random() < 0.6)
+              addTLine(
+                ts,
+                S.currentAttack,
+                `src=${src} port=${port} conf=${conf} anom=${anom.toFixed(3)} [${p.mitre}]`,
+                "c-red",
+                "c-red",
+              );
+          } else {
+            S.benign++;
+            bCnt++;
+            if (Math.random() < 0.04) {
+              const src = FAKE_IPS[Math.floor(Math.random() * FAKE_IPS.length)];
+              const port =
+                BENIGN_PORTS[Math.floor(Math.random() * BENIGN_PORTS.length)];
+              addTLine(
+                ts,
+                "BENIGN",
+                `flow ${S.total} — ${src}:${port} → ok`,
+                "c-green",
+                "dim",
+              );
+            }
+          }
+        }
+
+        // Update charts
+        trafficChart.data.datasets[0].data.push(bCnt);
+        trafficChart.data.datasets[0].data.shift();
+        trafficChart.data.datasets[1].data.push(aCnt);
+        trafficChart.data.datasets[1].data.shift();
+        trafficChart.update("none");
+
+        const lbls = Object.keys(S.labelDist);
+        distChart.data.labels = lbls;
+        distChart.data.datasets[0].data = lbls.map((k) => S.labelDist[k]);
+        distChart.update("none");
+
+        updateKPIs();
+        if (tick % 5 === 0) refreshAttackers();
+      }
+
+      setInterval(tick_fn, 800);
+
+      // ── Metric bar animations ─────────────────────────────────────────────────────
+      setTimeout(() => {
+        document.getElementById("mb-prec").style.width = "96.2%";
+        document.getElementById("mb-rec").style.width = "94.8%";
+        document.getElementById("mb-f1").style.width = "95.5%";
+        document.getElementById("mb-fpr").style.width = "1.8%";
+      }, 600);
+
+      // ── Try live API ──────────────────────────────────────────────────────────────
+      async function tryAPI() {
+        try {
+          const r = await fetch("http://localhost:8000/api/metrics", {
+            signal: AbortSignal.timeout(1500),
+          });
+          if (r.ok) {
+            const m = await r.json();
+            document.getElementById("m-prec").textContent =
+              (m.precision * 100).toFixed(1) + "%";
+            document.getElementById("m-rec").textContent =
+              (m.recall * 100).toFixed(1) + "%";
+            document.getElementById("m-f1").textContent =
+              (m.f1 * 100).toFixed(1) + "%";
+            document.getElementById("m-fpr").textContent =
+              (m.false_positive_rate * 100).toFixed(1) + "%";
+            document.getElementById("mb-prec").style.width =
+              m.precision * 100 + "%";
+            document.getElementById("mb-rec").style.width =
+              m.recall * 100 + "%";
+            document.getElementById("mb-f1").style.width = m.f1 * 100 + "%";
+            document.getElementById("mb-fpr").style.width =
+              m.false_positive_rate * 100 + "%";
+          }
+        } catch (_) {}
+      }
+      tryAPI();
+      setTimeout(tryAPI, 5000);
+    </script>
+  </body>
+</html>

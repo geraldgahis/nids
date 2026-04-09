@@ -1,0 +1,16 @@
+{
+  "precision": 0.8796,
+  "recall": 0.9039,
+  "f1": 0.8881,
+  "false_positive_rate": 0.0,
+  "classes": [
+    "BENIGN",
+    "Botnet",
+    "BruteForce",
+    "DDoS",
+    "Heartbleed",
+    "Infiltration",
+    "PortScan",
+    "WebAttack"
+  ]
+}
