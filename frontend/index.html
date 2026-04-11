@@ -48,8 +48,6 @@
         min-height: 100vh;
         overflow-x: hidden;
       }
-
-      /* Scanline overlay */
       body::after {
         content: "";
         position: fixed;
@@ -64,7 +62,6 @@
         pointer-events: none;
         z-index: 9999;
       }
-      /* Grid */
       body::before {
         content: "";
         position: fixed;
@@ -76,8 +73,6 @@
         pointer-events: none;
         z-index: 0;
       }
-
-      /* ── HEADER ── */
       header {
         position: sticky;
         top: 0;
@@ -155,17 +150,6 @@
       nav a:hover {
         color: var(--accent);
       }
-      .nav-btn {
-        background: var(--accent);
-        color: #000 !important;
-        padding: 7px 16px;
-        border-radius: 6px;
-        font-weight: 700 !important;
-        letter-spacing: 0 !important;
-        text-transform: none !important;
-      }
-
-      /* ── HERO ── */
       .hero {
         position: relative;
         padding: 5rem 2rem 3.5rem;
@@ -186,20 +170,6 @@
           transparent 70%
         );
         pointer-events: none;
-      }
-      .tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(0, 207, 255, 0.07);
-        border: 1px solid rgba(0, 207, 255, 0.2);
-        border-radius: 100px;
-        padding: 5px 14px;
-        font-size: 0.73rem;
-        font-family: var(--mono);
-        color: var(--accent);
-        margin-bottom: 1.75rem;
-        letter-spacing: 0.04em;
       }
       h1 {
         font-size: clamp(2rem, 4.5vw, 3.8rem);
@@ -232,48 +202,6 @@
         margin: 0 auto 2rem;
         line-height: 1.7;
       }
-      .hero-btns {
-        display: flex;
-        gap: 0.875rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 3rem;
-      }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 11px 26px;
-        border-radius: 8px;
-        font-family: var(--font);
-        font-weight: 700;
-        font-size: 0.88rem;
-        cursor: pointer;
-        border: none;
-        text-decoration: none;
-        transition: all 0.2s;
-        letter-spacing: 0.01em;
-      }
-      .btn-primary {
-        background: var(--accent);
-        color: #000;
-      }
-      .btn-primary:hover {
-        background: #33daff;
-        transform: translateY(-1px);
-        box-shadow: 0 8px 24px rgba(0, 207, 255, 0.3);
-      }
-      .btn-ghost {
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--border2);
-      }
-      .btn-ghost:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
-      /* ── TERMINAL ── */
       .terminal {
         background: #060c18;
         border: 1px solid var(--border);
@@ -355,8 +283,6 @@
       .c-purple {
         color: var(--purple);
       }
-
-      /* ── CONTAINER ── */
       .wrap {
         max-width: 1300px;
         margin: 0 auto;
@@ -382,20 +308,12 @@
         letter-spacing: -0.02em;
         color: #fff;
       }
-      h3 {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 0.4rem;
-        color: #fff;
-      }
       .lead {
         color: var(--muted2);
         max-width: 580px;
         line-height: 1.7;
         margin-bottom: 2.5rem;
       }
-
-      /* ── KPI CARDS ── */
       .kpi-row {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -458,8 +376,6 @@
         margin-top: 0.3rem;
         font-family: var(--mono);
       }
-
-      /* ── CHARTS ── */
       .chart-row {
         display: grid;
         grid-template-columns: 2fr 1fr;
@@ -487,8 +403,6 @@
         display: block;
         width: 100% !important;
       }
-
-      /* ── ALERT FEED ── */
       .alert-wrap {
         background: var(--panel);
         border: 1px solid var(--border);
@@ -566,8 +480,6 @@
       .dim {
         color: var(--muted);
       }
-
-      /* ── ATTACKERS ── */
       .atk-list {
         display: flex;
         flex-direction: column;
@@ -591,202 +503,11 @@
         color: var(--amber);
         font-weight: 700;
       }
-
-      /* ── BOTTOM ROW ── */
       .bottom-row {
         display: grid;
         grid-template-columns: 1fr 280px;
         gap: 14px;
       }
-
-      /* ── OSI TABLE ── */
-      .osi-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.82rem;
-      }
-      .osi-table th {
-        text-align: left;
-        padding: 0.6rem 1rem;
-        color: var(--muted);
-        font-size: 0.68rem;
-        font-family: var(--mono);
-        text-transform: uppercase;
-        letter-spacing: 0.09em;
-        border-bottom: 1px solid var(--border);
-        font-weight: 400;
-      }
-      .osi-table td {
-        padding: 0.65rem 1rem;
-        border-bottom: 1px solid rgba(26, 38, 64, 0.5);
-      }
-      .osi-table tr:hover td {
-        background: rgba(0, 207, 255, 0.025);
-      }
-      .osi-table tr:last-child td {
-        border-bottom: none;
-      }
-      .layer-num {
-        font-family: var(--mono);
-        font-weight: 700;
-        color: var(--accent);
-        width: 28px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 22px;
-        border: 1px solid rgba(0, 207, 255, 0.3);
-        border-radius: 4px;
-        font-size: 0.7rem;
-      }
-      .layer-target {
-        color: var(--red);
-        font-size: 0.72rem;
-        font-family: var(--mono);
-      }
-
-      /* ── PIPELINE ── */
-      .pipeline {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        overflow-x: auto;
-        padding: 1.5rem 0;
-      }
-      .pipe-step {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem 1.1rem;
-        min-width: 130px;
-        text-align: center;
-        flex-shrink: 0;
-      }
-      .pipe-step.active {
-        border-color: var(--accent);
-      }
-      .pipe-step.active h4 {
-        color: var(--accent);
-      }
-      .pipe-step h4 {
-        font-size: 0.82rem;
-        font-weight: 700;
-        margin-bottom: 0.2rem;
-        color: #fff;
-      }
-      .pipe-step p {
-        font-size: 0.68rem;
-        color: var(--muted);
-        font-family: var(--mono);
-      }
-      .pipe-arr {
-        color: var(--muted);
-        font-size: 1.1rem;
-        flex-shrink: 0;
-        padding: 0 0.4rem;
-      }
-      .pipe-ico {
-        font-size: 1.3rem;
-        margin-bottom: 0.4rem;
-      }
-
-      /* ── FEATURES GRID ── */
-      .feat-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-      }
-      .feat {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 1.4rem;
-        transition:
-          border-color 0.2s,
-          transform 0.2s;
-      }
-      .feat:hover {
-        border-color: var(--border2);
-        transform: translateY(-2px);
-      }
-      .feat-ico {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        margin-bottom: 0.9rem;
-      }
-      .feat h3 {
-        font-size: 1rem;
-        margin-bottom: 0.4rem;
-      }
-      .feat p {
-        color: var(--muted2);
-        font-size: 0.84rem;
-        line-height: 1.6;
-      }
-
-      /* ── CONCEPT CARDS ── */
-      .concept-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-        margin-top: 2rem;
-      }
-      .concept {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 1.4rem;
-      }
-      .concept h3 {
-        font-size: 0.95rem;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-        color: var(--accent);
-      }
-      .concept p {
-        color: var(--muted2);
-        font-size: 0.83rem;
-        line-height: 1.65;
-      }
-      .concept code {
-        font-family: var(--mono);
-        color: var(--amber);
-        font-size: 0.78rem;
-        background: rgba(255, 179, 0, 0.08);
-        padding: 1px 5px;
-        border-radius: 3px;
-      }
-      .vs-row {
-        display: flex;
-        gap: 12px;
-        margin-top: 0.75rem;
-      }
-      .vs-box {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 6px;
-        padding: 0.75rem;
-      }
-      .vs-label {
-        font-size: 0.67rem;
-        font-family: var(--mono);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: var(--muted);
-        margin-bottom: 0.4rem;
-      }
-      .vs-box p {
-        font-size: 0.79rem;
-        color: var(--muted2);
-        line-height: 1.55;
-      }
-
-      /* ── MITRE TABLE ── */
       .mitre-table {
         width: 100%;
         border-collapse: collapse;
@@ -859,8 +580,6 @@
         font-size: 0.7rem;
         font-family: var(--mono);
       }
-
-      /* ── METRICS ── */
       .metrics-row {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -889,147 +608,6 @@
         letter-spacing: 0.1em;
         margin-top: 0.5rem;
       }
-      .met-bar {
-        height: 3px;
-        background: var(--border);
-        border-radius: 2px;
-        margin-top: 0.875rem;
-        overflow: hidden;
-      }
-      .met-fill {
-        height: 100%;
-        border-radius: 2px;
-        background: var(--accent);
-        transition: width 1.2s ease;
-      }
-      .report-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-      }
-      .rpt {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0.9rem;
-        font-family: var(--mono);
-        font-size: 0.72rem;
-      }
-      .rpt-class {
-        color: #fff;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-      }
-      .rpt-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.25rem;
-      }
-      .rpt-row span {
-        color: var(--muted);
-      }
-      .rpt-row strong {
-        color: var(--text);
-      }
-
-      /* ── DEMO SECTION ── */
-      .demo-box {
-        background: rgba(255, 51, 85, 0.04);
-        border: 1px solid rgba(255, 51, 85, 0.2);
-        border-radius: 12px;
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
-      }
-      .demo-box::before {
-        content: "🔴 LIVE DEMO";
-        position: absolute;
-        top: 12px;
-        right: 16px;
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        color: var(--red);
-        letter-spacing: 0.12em;
-        animation: blink 1.4s infinite;
-      }
-      .demo-steps {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        margin-top: 1.5rem;
-      }
-      .demo-step {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 8px;
-        padding: 1rem;
-        border: 1px solid rgba(255, 51, 85, 0.1);
-      }
-      .step-num {
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        color: var(--red);
-        letter-spacing: 0.12em;
-        margin-bottom: 0.4rem;
-        text-transform: uppercase;
-      }
-      .step-ico {
-        font-size: 1.4rem;
-        margin-bottom: 0.4rem;
-      }
-      .demo-step h4 {
-        font-size: 0.88rem;
-        font-weight: 700;
-        margin-bottom: 0.3rem;
-      }
-      .demo-step p {
-        font-size: 0.77rem;
-        color: var(--muted2);
-        line-height: 1.55;
-      }
-      .nmap-cmd {
-        background: #060c18;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1rem 1.25rem;
-        margin-top: 1.5rem;
-        font-family: var(--mono);
-        font-size: 0.82rem;
-        color: var(--green);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .nmap-cmd .prompt {
-        color: var(--muted);
-      }
-
-      /* ── ALERT FATIGUE ── */
-      .fatigue-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        margin-top: 1.5rem;
-      }
-      .fat-card {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 1.2rem;
-      }
-      .fat-num {
-        font-size: 2rem;
-        font-weight: 800;
-        font-family: var(--mono);
-        margin-bottom: 0.3rem;
-      }
-      .fat-card p {
-        font-size: 0.82rem;
-        color: var(--muted2);
-        line-height: 1.6;
-        margin-top: 0.3rem;
-      }
-
-      /* ── FOOTER ── */
       footer {
         border-top: 1px solid var(--border);
         padding: 1.75rem 2rem;
@@ -1040,8 +618,6 @@
         position: relative;
         z-index: 1;
       }
-
-      /* ── SCROLLBAR ── */
       ::-webkit-scrollbar {
         width: 4px;
         height: 4px;
@@ -1053,8 +629,6 @@
         background: var(--border2);
         border-radius: 2px;
       }
-
-      /* ── RESPONSIVE ── */
       @media (max-width: 1024px) {
         .kpi-row {
           grid-template-columns: repeat(3, 1fr);
@@ -1063,20 +637,11 @@
         .bottom-row {
           grid-template-columns: 1fr;
         }
-        .feat-grid,
-        .concept-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .demo-steps,
-        .fatigue-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
       }
       @media (max-width: 768px) {
         .kpi-row {
           grid-template-columns: repeat(2, 1fr);
         }
-        .feat-grid,
         .metrics-row {
           grid-template-columns: 1fr;
         }
@@ -1090,14 +655,6 @@
         }
         nav {
           display: none;
-        }
-      }
-      @media (max-width: 480px) {
-        .concept-grid,
-        .demo-steps,
-        .fatigue-grid,
-        .report-grid {
-          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -1133,7 +690,6 @@
       </div>
       <nav>
         <a href="#dashboard">Dashboard</a>
-        <!-- <a href="#concepts">Concepts</a> -->
         <a href="#mitre">MITRE</a>
       </nav>
     </header>
@@ -1161,14 +717,9 @@
             </div>
             <div class="t-line show">
               <span class="t-ts c-blue">nids@sys</span
-              ><span class="t-lbl c-green">[OK]</span
-              ><span>Zeek capture module initialized on eth0 ✓</span>
-            </div>
-            <div class="t-line show">
-              <span class="t-ts c-blue">nids@sys</span
               ><span class="t-lbl c-green">[READY]</span
               ><span style="color: var(--green)"
-                >System armed — monitoring network traffic ███</span
+                >System armed — monitoring real network traffic ███</span
               >
             </div>
           </div>
@@ -1181,8 +732,9 @@
         <div class="sec-tag">Live Dashboard</div>
         <h2>Real-Time Detection Center</h2>
         <p class="lead">
-          Simulated live traffic with injected attack bursts. Watch the ML
-          engine classify each flow and raise severity-graded alerts.
+          Processing live CIC-IDS2018 flows. Watch the ML engine classify each
+          flow and raise severity-graded alerts based on actual model
+          predictions.
         </p>
 
         <div class="kpi-row">
@@ -1213,9 +765,9 @@
             <div class="kpi-glow"></div>
           </div>
           <div class="kpi kpi-pur">
-            <div class="kpi-lbl">Anomaly Score</div>
-            <div class="kpi-val" id="kpi-anom">—</div>
-            <div class="kpi-sub">Isolation Forest avg</div>
+            <div class="kpi-lbl">Status</div>
+            <div class="kpi-val" id="kpi-anom">LIVE</div>
+            <div class="kpi-sub">Predicting CSV Stream</div>
             <div class="kpi-glow"></div>
           </div>
         </div>
@@ -1280,280 +832,14 @@
       </div>
     </section>
 
-    <!-- <section class="sec" id="concepts">
-      <div class="wrap">
-        <div class="sec-tag">Key Lessons & Concepts</div>
-        <h2>What the System Demonstrates</h2>
-        <p class="lead">
-          Core cybersecurity concepts built into every layer of this NIDS
-          project.
-        </p>
-
-        <div class="panel" style="margin-bottom: 2rem; overflow-x: auto">
-          <div class="panel-hd">🔄 Detection Pipeline</div>
-          <div class="pipeline">
-            <div class="pipe-step active">
-              <div class="pipe-ico">📡</div>
-              <h4>Capture</h4>
-              <p>Zeek / pcap<br />conn.log</p>
-            </div>
-            <div class="pipe-arr">→</div>
-            <div class="pipe-step active">
-              <div class="pipe-ico">⚗️</div>
-              <h4>Extract</h4>
-              <p>32 features<br />per flow</p>
-            </div>
-            <div class="pipe-arr">→</div>
-            <div class="pipe-step active">
-              <div class="pipe-ico">🌲</div>
-              <h4>Classify</h4>
-              <p>Isolation Forest<br />+ Rand. Forest</p>
-            </div>
-            <div class="pipe-arr">→</div>
-            <div class="pipe-step active">
-              <div class="pipe-ico">🗺️</div>
-              <h4>Map</h4>
-              <p>MITRE ATTACK<br />technique IDs</p>
-            </div>
-            <div class="pipe-arr">→</div>
-            <div class="pipe-step active">
-              <div class="pipe-ico">🚨</div>
-              <h4>Alert</h4>
-              <p>Dashboard<br />+ REST API</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="concept-grid">
-          <div class="concept">
-            <h3>📦 How Network Packets Work</h3>
-            <p>
-              Every connection generates a <em>flow</em>: packets traveling
-              between an IP:port source and destination. Our system watches 32
-              features per flow — from <code>syn_flag_count</code> to
-              <code>flow_bytes_per_sec</code>. A port scan looks totally
-              different from HTTP browsing: tiny payloads, rapid SYN bursts,
-              near-zero response bytes.
-            </p>
-          </div>
-
-          <div class="concept">
-            <h3>🌐 The 7-Layer OSI Model</h3>
-            <p>
-              Different attacks target different layers. Knowing which layer is
-              under attack helps tune detector sensitivity.
-            </p>
-            <table
-              class="osi-table"
-              style="margin-top: 0.75rem; font-size: 0.75rem"
-            >
-              <tr>
-                <td><span class="layer-num">7</span> Application</td>
-                <td><span class="layer-target">WebAttack, Heartbleed</span></td>
-              </tr>
-              <tr>
-                <td><span class="layer-num">4</span> Transport</td>
-                <td><span class="layer-target">PortScan, BruteForce</span></td>
-              </tr>
-              <tr>
-                <td><span class="layer-num">3</span> Network</td>
-                <td><span class="layer-target">DDoS, IP spoofing</span></td>
-              </tr>
-              <tr>
-                <td><span class="layer-num">2</span> Data Link</td>
-                <td><span class="layer-target">ARP spoofing</span></td>
-              </tr>
-            </table>
-          </div>
-
-          <div class="concept">
-            <h3>🔎 Anomaly vs. Signature Detection</h3>
-            <p>
-              Signature-based systems (Snort/Suricata) match known attack
-              patterns — fast and precise but blind to new threats. ML-based
-              anomaly detection learns what's <em>normal</em> and flags
-              deviations, catching zero-days.
-            </p>
-            <div class="vs-row">
-              <div class="vs-box">
-                <div class="vs-label">Signature (Snort)</div>
-                <p>
-                  ✅ Very low FPR<br />✅ Explainable<br />❌ Misses 0-days<br />❌
-                  Needs rule updates
-                </p>
-              </div>
-              <div class="vs-box">
-                <div class="vs-label">ML Anomaly (Ours)</div>
-                <p>
-                  ✅ Catches 0-days<br />✅ Auto-adapts<br />⚠️ Higher FPR<br />⚠️
-                  Black-box
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="concept">
-            <h3>🌲 Isolation Forest Algorithm</h3>
-            <p>
-              Randomly partitions the feature space. Normal points require
-              <em>many</em> splits to isolate. Anomalies (attacks) are isolated
-              in <em>few</em> splits because they occupy sparse regions of the
-              32-dimensional feature space.
-            </p>
-            <p style="margin-top: 0.6rem">
-              Anomaly score: closer to <code>-1.0</code> = highly anomalous.
-              Score ≥ <code>0.0</code> = normal. Trained on benign traffic only
-              — no labeled attacks needed.
-            </p>
-            <p
-              style="
-                margin-top: 0.6rem;
-                font-size: 0.78rem;
-                color: var(--muted);
-              "
-            >
-              Contamination: 5% → threshold tuned to our expected attack rate.
-            </p>
-          </div>
-
-          <div class="concept" style="grid-column: 1/-1">
-            <h3>😴 The Alert Fatigue Problem</h3>
-            <p>
-              A SOC analyst drowning in thousands of low-confidence alerts will
-              start ignoring them — including real threats. Every false positive
-              wastes analyst time and erodes trust in the system.
-            </p>
-            <div class="fatigue-grid" style="margin-top: 1rem">
-              <div
-                class="fat-card"
-                style="border-color: rgba(255, 51, 85, 0.2)"
-              >
-                <div class="fat-num" style="color: var(--red)">1.8%</div>
-                <div
-                  style="
-                    font-size: 0.7rem;
-                    color: var(--muted);
-                    font-family: var(--mono);
-                  "
-                >
-                  FALSE POSITIVE RATE
-                </div>
-                <p>
-                  Our model's FPR on CICIDS2017-style data. For 1M flows/day,
-                  that's 18,000 false alarms — still a lot. Tuning contamination
-                  and confidence thresholds reduces this.
-                </p>
-              </div>
-              <div
-                class="fat-card"
-                style="border-color: rgba(255, 179, 0, 0.2)"
-              >
-                <div class="fat-num" style="color: var(--amber)">0.70</div>
-                <div
-                  style="
-                    font-size: 0.7rem;
-                    color: var(--muted);
-                    font-family: var(--mono);
-                  "
-                >
-                  HIGH SEVERITY THRESHOLD
-                </div>
-                <p>
-                  Only alerts where confidence &gt; 70% escalate to HIGH
-                  severity. MEDIUM catches lower-confidence detections. This
-                  tiering reduces critical alert volume by ~60%.
-                </p>
-              </div>
-              <div
-                class="fat-card"
-                style="border-color: rgba(0, 207, 255, 0.2)"
-              >
-                <div class="fat-num" style="color: var(--accent)">Dual</div>
-                <div
-                  style="
-                    font-size: 0.7rem;
-                    color: var(--muted);
-                    font-family: var(--mono);
-                  "
-                >
-                  MODEL CONSENSUS
-                </div>
-                <p>
-                  An alert is only marked HIGH when <em>both</em> the Random
-                  Forest classifier and Isolation Forest anomaly detector agree.
-                  Two-model consensus dramatically cuts false positives.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="feat-grid" style="margin-top: 2rem">
-          <div class="feat">
-            <div class="feat-ico" style="background: rgba(0, 207, 255, 0.1)">
-              📡
-            </div>
-            <h3>Zeek Traffic Capture</h3>
-            <p>
-              Parses Zeek
-              <code
-                style="
-                  color: var(--accent);
-                  font-family: var(--mono);
-                  font-size: 0.78rem;
-                "
-                >conn.log</code
-              >
-              or live pcap streams. Extracts 32 CICIDS2017-style features per
-              flow: duration, packet counts, byte volumes, TCP flags,
-              inter-arrival times.
-            </p>
-          </div>
-          <div class="feat">
-            <div class="feat-ico" style="background: rgba(168, 85, 247, 0.1)">
-              🧠
-            </div>
-            <h3>Dual-Model ML Pipeline</h3>
-            <p>
-              Isolation Forest (unsupervised anomaly) + Random Forest
-              (supervised classifier, 300 trees, max_depth 20). Both run in
-              &lt;5ms per flow. Class-balanced training handles the imbalanced
-              attack dataset.
-            </p>
-          </div>
-          <div class="feat">
-            <div class="feat-ico" style="background: rgba(0, 230, 118, 0.1)">
-              📊
-            </div>
-            <h3>Evaluation Metrics</h3>
-            <p>
-              Precision 96.2%, Recall 94.8%, F1-Score 95.5%, FPR 1.8% — computed
-              on an 80/20 stratified train-test split. Per-class classification
-              report available via
-              <code
-                style="
-                  color: var(--accent);
-                  font-family: var(--mono);
-                  font-size: 0.78rem;
-                "
-                >/api/metrics</code
-              >.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
     <section class="sec" id="mitre" style="background: var(--surface)">
       <div class="wrap">
         <div class="sec-tag">Threat Intelligence</div>
         <h2>MITRE ATTACK Mapping</h2>
-        <p class="lead">
-          Every ML-detected attack is automatically linked to a standardized
-          MITRE ATTACK technique ID, providing actionable threat context for SOC
-          analysts.
-        </p>
-        <div class="panel" style="padding: 0; overflow: hidden">
+        <div
+          class="panel"
+          style="padding: 0; overflow: hidden; margin-bottom: 2rem"
+        >
           <table class="mitre-table">
             <thead>
               <tr>
@@ -1605,40 +891,11 @@
                   ↑ fwd payload, ↑ PSH flags, port 80/443
                 </td>
               </tr>
-              <tr>
-                <td><span class="badge bM">Botnet</span></td>
-                <td><span class="tid">T1583</span></td>
-                <td>Acquire Infrastructure</td>
-                <td><span class="tactic-pill tac-res">Resource Dev.</span></td>
-                <td class="sig-hint">
-                  Periodic beaconing, low entropy IAT, stable flow rate
-                </td>
-              </tr>
-              <tr>
-                <td><span class="badge bM">Infiltration</span></td>
-                <td><span class="tid">T1071</span></td>
-                <td>Application Layer Protocol</td>
-                <td><span class="tactic-pill tac-c2">C2</span></td>
-                <td class="sig-hint">
-                  Long duration, low packet rate, encrypted payloads
-                </td>
-              </tr>
-              <tr>
-                <td><span class="badge bH">Heartbleed</span></td>
-                <td><span class="tid">T1210</span></td>
-                <td>Exploitation of Remote Services</td>
-                <td>
-                  <span class="tactic-pill tac-lat">Lateral Movement</span>
-                </td>
-                <td class="sig-hint">
-                  Malformed TLS record length, data exfiltration pattern
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
 
-        <div class="sec-tag" style="margin-top: 2rem">Confusion Matrix</div>
+        <div class="sec-tag">Confusion Matrix</div>
         <div class="metrics-row">
           <div class="met-card" style="border-bottom: 3px solid var(--green)">
             <div class="met-val" id="cm-tp">0</div>
@@ -1663,44 +920,15 @@
     <footer>
       <div class="wrap">NIDS — ML-Based Network Intrusion Detection System</div>
     </footer>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 
     <script>
       // ── State ────────────────────────────────────────────────────────────────────
-      const ATTACK_PROFILES = {
-        PortScan: { mitre: "T1046", tactic: "Discovery", sev: "HIGH" },
-        DDoS: { mitre: "T1498", tactic: "Impact", sev: "HIGH" },
-        BruteForce: {
-          mitre: "T1110",
-          tactic: "Credential Access",
-          sev: "HIGH",
-        },
-        WebAttack: { mitre: "T1190", tactic: "Initial Access", sev: "MEDIUM" },
-        Botnet: { mitre: "T1583", tactic: "Resource Dev.", sev: "MEDIUM" },
-        Infiltration: { mitre: "T1071", tactic: "C2", sev: "MEDIUM" },
-      };
-      const ATK_TYPES = Object.keys(ATTACK_PROFILES);
-      const FAKE_IPS = ["192.168.1.", "10.0.0.", "172.16.1."].flatMap((p) =>
-        Array(15)
-          .fill(0)
-          .map((_, i) => p + (i + 1)),
-      );
-      const ATK_IPS = ["203.0.113.", "198.51.100.", "0.0.0."].flatMap((p) =>
-        Array(10)
-          .fill(0)
-          .map((_, i) => p + (i + 1)),
-      );
-      const BENIGN_PORTS = [80, 443, 22, 53, 8080, 3306, 5432, 6379];
-
       let S = {
         total: 0,
         attacks: 0,
         benign: 0,
         labelDist: {},
-        anomScores: [],
-        currentAttack: null,
-        attackEnd: 0,
         attackerMap: {},
         prevAtk: 0,
         prevTotal: 0,
@@ -1712,7 +940,6 @@
       Chart.defaults.borderColor = "#1a2640";
       Chart.defaults.font.family = "'JetBrains Mono',monospace";
       Chart.defaults.font.size = 10;
-
       const trafficChart = new Chart(
         document.getElementById("chartTraffic").getContext("2d"),
         {
@@ -1759,7 +986,6 @@
           },
         },
       );
-
       const distChart = new Chart(
         document.getElementById("chartDist").getContext("2d"),
         {
@@ -1821,14 +1047,7 @@
               ? "var(--amber)"
               : "var(--accent)";
         const bc = a.sev === "HIGH" ? "bH" : a.sev === "MEDIUM" ? "bM" : "bL";
-        row.innerHTML = `
-    <div class="sdot"></div>
-    <span style="color:${sc};font-weight:700">${a.label}</span>
-    <span class="dim">${a.src}</span>
-    <span class="dim">:${a.port}</span>
-    <span class="badge ${bc}">${a.sev}</span>
-    <span class="mtag">${a.mitre} (${a.tactic})</span>
-    <span class="dim">${a.ts}</span>`;
+        row.innerHTML = `<div class="sdot"></div><span style="color:${sc};font-weight:700">${a.label}</span><span class="dim">${a.src}</span><span class="dim">:${a.port}</span><span class="badge ${bc}">${a.sev}</span><span class="mtag">${a.mitre} (${a.tactic})</span><span class="dim">${a.ts}</span>`;
         AB.prepend(row);
         while (AB.children.length > 80) AB.removeChild(AB.lastChild);
       }
@@ -1842,11 +1061,8 @@
         if (!sorted.length) return;
         AL.innerHTML = sorted
           .map(
-            ([ip, cnt]) => `
-    <div class="atk-row">
-      <span class="atk-ip">${ip}</span>
-      <span class="atk-cnt">${cnt} alerts</span>
-    </div>`,
+            ([ip, cnt]) =>
+              `<div class="atk-row"><span class="atk-ip">${ip}</span><span class="atk-cnt">${cnt} alerts</span></div>`,
           )
           .join("");
       }
@@ -1859,16 +1075,8 @@
           S.benign.toLocaleString();
         document.getElementById("kpi-attacks").textContent =
           S.attacks.toLocaleString();
-        const rate =
-          S.total > 0 ? ((S.attacks / S.total) * 100).toFixed(1) : "0.0";
-        document.getElementById("kpi-rate").textContent = rate + "%";
-        const avg = S.anomScores.length
-          ? (
-              S.anomScores.slice(-30).reduce((a, b) => a + b, 0) /
-              Math.min(S.anomScores.length, 30)
-            ).toFixed(3)
-          : "—";
-        document.getElementById("kpi-anom").textContent = avg;
+        document.getElementById("kpi-rate").textContent =
+          S.total > 0 ? ((S.attacks / S.total) * 100).toFixed(1) + "%" : "0.0%";
         const fps = ((S.total - S.prevTotal) / 0.8).toFixed(1);
         document.getElementById("kpi-rate-sub").textContent = fps + " flows/s";
         S.prevTotal = S.total;
@@ -1877,138 +1085,99 @@
         S.prevAtk = S.attacks;
       }
 
-      // ── Simulation Tick ───────────────────────────────────────────────────────────
-      function tick_fn() {
-        tick++;
-        const now = new Date();
-        const ts = now.toTimeString().slice(0, 8);
-        const isAtk = Date.now() < S.attackEnd && S.currentAttack;
+      // ── REAL-TIME API STREAMER ─────────────────────────────────────────────────────
+      async function pollRealTraffic() {
+        try {
+          tick++;
+          const now = new Date();
+          const ts = now.toTimeString().slice(0, 8);
 
-        if (!isAtk && Math.random() < 0.022) {
-          S.currentAttack =
-            ATK_TYPES[Math.floor(Math.random() * ATK_TYPES.length)];
-          S.attackEnd = Date.now() + (4000 + Math.random() * 7000);
-          const src = ATK_IPS[Math.floor(Math.random() * ATK_IPS.length)];
-          addTLine(
-            ts,
-            "ALERT",
-            `🔴 Attack burst: ${S.currentAttack} from ${src}`,
-            "c-red",
-            "c-red",
-          );
-        }
+          // Fetch a real row from the backend CSV streamer
+          const res = await fetch("http://localhost:8000/api/stream");
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data.error) return;
 
-        const flows = isAtk
-          ? Math.floor(3 + Math.random() * 5)
-          : Math.floor(1 + Math.random() * 3);
-        let bCnt = 0,
-          aCnt = 0;
-
-        for (let i = 0; i < flows; i++) {
+          const pred = data.prediction;
           S.total++;
-          const attackFlow = isAtk && Math.random() < 0.72;
-          const anom = attackFlow
-            ? -(0.4 + Math.random() * 0.55)
-            : 0.05 + Math.random() * 0.4;
-          S.anomScores.push(anom);
-          if (S.anomScores.length > 500) S.anomScores.shift();
 
-          if (attackFlow) {
-            S.attacks++;
-            aCnt++;
-            const p = ATTACK_PROFILES[S.currentAttack];
-            S.labelDist[S.currentAttack] =
-              (S.labelDist[S.currentAttack] || 0) + 1;
-            const src = ATK_IPS[Math.floor(Math.random() * ATK_IPS.length)];
-            const port =
-              S.currentAttack === "BruteForce"
-                ? 22
-                : S.currentAttack === "DDoS"
-                  ? 80
-                  : Math.floor(Math.random() * 65535);
-            const conf = (0.72 + Math.random() * 0.26).toFixed(2);
-            const sev = parseFloat(conf) > 0.85 ? "HIGH" : p.sev;
-            S.attackerMap[src] = (S.attackerMap[src] || 0) + 1;
-            addAlert({
-              label: S.currentAttack,
-              src,
-              port,
-              sev,
-              mitre: p.mitre,
-              tactic: p.tactic,
-              ts,
-              conf,
-            });
-            if (Math.random() < 0.6)
-              addTLine(
-                ts,
-                S.currentAttack,
-                `src=${src} port=${port} conf=${conf} anom=${anom.toFixed(3)} [${p.mitre}]`,
-                "c-red",
-                "c-red",
-              );
-          } else {
+          if (pred.attack_type === "Normal") {
             S.benign++;
-            bCnt++;
-            if (Math.random() < 0.04) {
-              const src = FAKE_IPS[Math.floor(Math.random() * FAKE_IPS.length)];
-              const port =
-                BENIGN_PORTS[Math.floor(Math.random() * BENIGN_PORTS.length)];
+            // Print 5% of benign traffic so we don't spam the terminal
+            if (Math.random() < 0.05) {
               addTLine(
                 ts,
                 "BENIGN",
-                `flow ${S.total} — ${src}:${port} → ok`,
+                `flow ${S.total} — ${data.src_ip}:${data.dest_port} → ok`,
                 "c-green",
                 "dim",
               );
             }
+          } else {
+            S.attacks++;
+            const atkType = pred.attack_type;
+
+            S.labelDist[atkType] = (S.labelDist[atkType] || 0) + 1;
+            S.attackerMap[data.src_ip] = (S.attackerMap[data.src_ip] || 0) + 1;
+
+            addAlert({
+              label: atkType,
+              src: data.src_ip,
+              port: data.dest_port,
+              sev: pred.severity || "HIGH",
+              mitre: pred.mitre_id,
+              tactic: pred.description || "Malicious",
+              ts: ts,
+              conf: data.confidence,
+            });
+            addTLine(
+              ts,
+              "ALERT",
+              `🔴 ${atkType} detected from ${data.src_ip} [${pred.mitre_id}]`,
+              "c-red",
+              "c-red",
+            );
           }
-        }
 
-        // Update charts
-        trafficChart.data.datasets[0].data.push(bCnt);
-        trafficChart.data.datasets[0].data.shift();
-        trafficChart.data.datasets[1].data.push(aCnt);
-        trafficChart.data.datasets[1].data.shift();
-        trafficChart.update("none");
+          // Update the line charts
+          const bCnt =
+            trafficChart.data.datasets[0].data[59] +
+            (pred.attack_type === "Normal" ? 1 : 0);
+          const aCnt =
+            trafficChart.data.datasets[1].data[59] +
+            (pred.attack_type !== "Normal" ? 1 : 0);
 
-        const lbls = Object.keys(S.labelDist);
-        distChart.data.labels = lbls;
-        distChart.data.datasets[0].data = lbls.map((k) => S.labelDist[k]);
-        distChart.update("none");
+          if (tick % 10 === 0) {
+            trafficChart.data.datasets[0].data.push(0);
+            trafficChart.data.datasets[0].data.shift();
+            trafficChart.data.datasets[1].data.push(0);
+            trafficChart.data.datasets[1].data.shift();
+          } else {
+            trafficChart.data.datasets[0].data[59] = bCnt;
+            trafficChart.data.datasets[1].data[59] = aCnt;
+          }
+          trafficChart.update("none");
 
-        updateKPIs();
-        if (tick % 5 === 0) refreshAttackers();
+          // Update Doughnut chart
+          const lbls = Object.keys(S.labelDist);
+          distChart.data.labels = lbls;
+          distChart.data.datasets[0].data = lbls.map((k) => S.labelDist[k]);
+          distChart.update("none");
+
+          updateKPIs();
+          if (tick % 5 === 0) refreshAttackers();
+        } catch (err) {}
       }
 
-      setInterval(tick_fn, 800);
+      // Poll the backend every 400 milliseconds
+      setInterval(pollRealTraffic, 400);
 
-      // ── Try live API ──────────────────────────────────────────────────────────────
+      // ── Metrics API (Fetches Confusion Matrix) ──────────────────────────────────────
       async function tryAPI() {
         try {
-          const r = await fetch("http://localhost:8000/api/metrics", {
-            signal: AbortSignal.timeout(1500),
-          });
+          const r = await fetch("http://localhost:8000/api/metrics");
           if (r.ok) {
             const m = await r.json();
-            if (document.getElementById("m-prec")) {
-              document.getElementById("m-prec").textContent =
-                (m.precision * 100).toFixed(1) + "%";
-              document.getElementById("m-rec").textContent =
-                (m.recall * 100).toFixed(1) + "%";
-              document.getElementById("m-f1").textContent =
-                (m.f1 * 100).toFixed(1) + "%";
-              document.getElementById("m-fpr").textContent =
-                (m.false_positive_rate * 100).toFixed(1) + "%";
-              document.getElementById("mb-prec").style.width =
-                m.precision * 100 + "%";
-              document.getElementById("mb-rec").style.width =
-                m.recall * 100 + "%";
-              document.getElementById("mb-f1").style.width = m.f1 * 100 + "%";
-              document.getElementById("mb-fpr").style.width =
-                m.false_positive_rate * 100 + "%";
-            }
-
             if (m.confusion_matrix) {
               document.getElementById("cm-tp").textContent =
                 m.confusion_matrix.true_positive;
@@ -2049,7 +1218,7 @@
         animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         transform: translateX(120%);
       }
-      .nids-toast.toast-high {
+      .toast-high {
         border-left-color: #ff3355;
       }
       .nids-toast-header {
@@ -2082,51 +1251,28 @@
     <div id="nids-toast-box"></div>
 
     <script>
-      // Tracks IPs so we don't spam the screen
       const warnedIPs = new Set();
-
       function spawnToast(ip, count) {
         const box = document.getElementById("nids-toast-box");
         const toast = document.createElement("div");
-
-        // Escalate the UI severity if the attacker is extremely aggressive
         const isCritical = count >= 10;
-        const severityClass = isCritical ? "toast-high" : "";
-        const icon = isCritical ? "🔥" : "🏴‍☠️";
-
-        toast.className = `nids-toast ${severityClass}`;
-        toast.innerHTML = `
-          <div class="nids-toast-header">
-            <span>${icon} Top Attacker Alert</span>
-          </div>
-          <div>Source IP: <span class="nids-toast-ip">${ip}</span></div>
-          <div style="color: #6a8aaa; font-size: 0.75rem; margin-top: 4px;">Registered <b>${count}</b> malicious flows</div>
-        `;
-
+        toast.className = `nids-toast ${isCritical ? "toast-high" : ""}`;
+        toast.innerHTML = `<div class="nids-toast-header"><span>${isCritical ? "🔥" : "🏴‍☠️"} Top Attacker Alert</span></div><div>Source IP: <span class="nids-toast-ip">${ip}</span></div><div style="color: #6a8aaa; font-size: 0.75rem; margin-top: 4px;">Registered <b>${count}</b> malicious flows</div>`;
         box.appendChild(toast);
-
-        // Auto-remove the popup after 6 seconds
         setTimeout(() => {
           toast.classList.add("toast-fade");
           setTimeout(() => toast.remove(), 400);
         }, 6000);
       }
-
-      // Instead of polling the API, we poll the global Simulator state (S.attackerMap)
       function pollTopAttackers() {
-        // S.attackerMap is generated by your existing simulator script above
         if (typeof S === "undefined" || !S.attackerMap) return;
-
         for (const [ip, count] of Object.entries(S.attackerMap)) {
-          // Trigger if they hit 5 times, and we haven't warned about them yet
-          if (count >= 5 && !warnedIPs.has(ip)) {
+          if (count >= 2 && !warnedIPs.has(ip)) {
             spawnToast(ip, count);
             warnedIPs.add(ip);
           }
         }
       }
-
-      // Run the background checker every 2 seconds
       setInterval(pollTopAttackers, 2000);
     </script>
   </body>
