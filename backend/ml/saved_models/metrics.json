@@ -1,6 +1,12 @@
 {
-    "f1_score": 0.7081,
-    "false_positive_rate": 0.0,
-    "pipeline_status": "Complete: Synthetic Ingest -> Train -> Evaluate",
+    "f1_score": 0.9998,
+    "false_positive_rate": 0.0001,
+    "confusion_matrix": {
+        "true_positive": 25735,
+        "true_negative": 19404,
+        "false_positive": 1,
+        "false_negative": 9
+    },
+    "pipeline_status": "Complete: Real Data Ingest -> Train -> Evaluate",
     "models_compared": "Isolation Forest (Anomaly) vs Random Forest (Signature)"
 }

@@ -236,7 +236,7 @@ from typing import List
 from collections import deque
 import asyncio
 from datetime import datetime
-from backend.ml.model import NIDSEngine
+from ml.model import NIDSEngine
 
 app = FastAPI(title="Live NIDS API")
 
@@ -327,10 +327,15 @@ async def get_stats():
 
 @app.get("/api/metrics")
 async def get_metrics():
-    # Tells the dashboard that the ML model is online
+    import json
+    import os
+    
+    # Safely build the path relative to api.py
+    base_dir = os.path.dirname(__file__)
+    metrics_path = os.path.join(base_dir, "ml", "saved_models", "metrics.json")
+    
     try:
-        import json
-        with open("ml/saved_models/metrics.json", "r") as f:
+        with open(metrics_path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return {"f1_score": 0.0, "status": "Training required"}

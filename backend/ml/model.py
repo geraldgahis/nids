@@ -2,14 +2,15 @@ import os
 import json
 import joblib
 import numpy as np
+import pandas as pd
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
-from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, confusion_matrix
 
 # Bulletproof pathing: Always locks onto backend/ml/saved_models
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "saved_models")
+DATA_DIR = os.path.join(BASE_DIR, "data")
 
 class NIDSEngine:
     def __init__(self):
@@ -52,29 +53,63 @@ class NIDSEngine:
             "severity": "High"
         }
 
+def load_real_data():
+    """Loads and cleans the CICIDS2017 Machine Learning CSV"""
+    csv_path = os.path.join(DATA_DIR, "cicids2017.csv")
+    
+    if not os.path.exists(csv_path):
+        raise FileNotFoundError(f"Real dataset not found at {csv_path}. Please place the CSV file there.")
+        
+    print(f"Loading real dataset from {csv_path}...")
+    df = pd.read_csv(csv_path)
+    
+    # 1. Clean Column Names (CICIDS has trailing spaces)
+    df.columns = df.columns.str.strip()
+    
+    # 2. Map CICIDS String Labels to our 0-5 Integer Classes
+    def map_label(label):
+        label = str(label).upper()
+        if "BENIGN" in label: return 0
+        if "PORTSCAN" in label: return 1
+        if "DOS" in label or "DDOS" in label: return 2
+        if "PATATOR" in label or "BRUTE" in label: return 3
+        if "BOT" in label: return 4
+        if "WEB" in label: return 5
+        return 0 # Default unknown anomalies to benign for safety
+        
+    y = df['Label'].apply(map_label).values
+    
+    # 3. Clean Features (Drop non-numeric, handle Infinity/NaN)
+    X_df = df.drop(columns=['Label']).select_dtypes(include=[np.number])
+    X_df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    X_df.fillna(0, inplace=True)
+    
+    # 4. Enforce exactly 32 features to match our pipeline requirements
+    if X_df.shape[1] > 32:
+        X_df = X_df.iloc[:, :32]
+        
+    print(f"Dataset Loaded: {X_df.shape[0]} flows, {X_df.shape[1]} features.")
+    return X_df.values, y
+
 def train_models():
-    """Data Pipeline: Generate -> Clean -> Feature Select -> Train"""
+    """Data Pipeline: Load Real -> Clean -> Train"""
     print("1. Initializing Data Pipeline...")
     
-    # Generate a realistic 32-feature dataset simulating network flows
-    X, y = make_classification(
-        n_samples=15000, 
-        n_features=32, 
-        n_informative=24, 
-        n_redundant=4,
-        n_classes=6, 
-        weights=[0.7, 0.06, 0.06, 0.06, 0.06, 0.06], 
-        random_state=42
-    )
+    try:
+        X, y = load_real_data()
+    except Exception as e:
+        print(f"Error loading real data: {e}")
+        return
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     print("2. Training Isolation Forest (Anomaly Detection)...")
-    iso_forest = IsolationForest(contamination=0.3, random_state=42)
+    # Tuned contamination down slightly since real dataset has specific benign ratios
+    iso_forest = IsolationForest(contamination=0.15, random_state=42, n_jobs=-1)
     iso_forest.fit(X_train)
     
     print("3. Training Random Forest (Classification)...")
-    rf_clf = RandomForestClassifier(n_estimators=100, max_depth=15, random_state=42)
+    rf_clf = RandomForestClassifier(n_estimators=100, max_depth=15, random_state=42, n_jobs=-1)
     rf_clf.fit(X_train, y_train)
     
     print("4. Evaluating Detection Accuracy...")
@@ -87,6 +122,7 @@ def train_models():
     fpr = fp / (fp + tn) if (fp + tn) > 0 else 0
     
     print(f"Success! F1 Score: {f1:.4f} | FPR: {fpr:.4f}")
+    print(f"Matrix -> TP: {tp}, TN: {tn}, FP: {fp}, FN: {fn}")
     
     # Save all Artifacts to the consolidated MODEL_DIR
     os.makedirs(MODEL_DIR, exist_ok=True)
@@ -109,7 +145,13 @@ def train_models():
         json.dump({
             "f1_score": round(f1, 4),
             "false_positive_rate": round(fpr, 4),
-            "pipeline_status": "Complete: Synthetic Ingest -> Train -> Evaluate",
+            "confusion_matrix": {
+                "true_positive": int(tp),
+                "true_negative": int(tn),
+                "false_positive": int(fp),
+                "false_negative": int(fn)
+            },
+            "pipeline_status": "Complete: Real Data Ingest -> Train -> Evaluate",
             "models_compared": "Isolation Forest (Anomaly) vs Random Forest (Signature)"
         }, f, indent=4)
     print(f"All files successfully saved to: {MODEL_DIR}")

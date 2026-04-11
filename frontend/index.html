@@ -1637,6 +1637,26 @@
             </tbody>
           </table>
         </div>
+
+        <div class="sec-tag" style="margin-top: 2rem">Confusion Matrix</div>
+        <div class="metrics-row">
+          <div class="met-card" style="border-bottom: 3px solid var(--green)">
+            <div class="met-val" id="cm-tp">0</div>
+            <div class="met-lbl">True Positives</div>
+          </div>
+          <div class="met-card" style="border-bottom: 3px solid var(--accent)">
+            <div class="met-val" id="cm-tn">0</div>
+            <div class="met-lbl">True Negatives</div>
+          </div>
+          <div class="met-card" style="border-bottom: 3px solid var(--red)">
+            <div class="met-val" id="cm-fp">0</div>
+            <div class="met-lbl">False Positives</div>
+          </div>
+          <div class="met-card" style="border-bottom: 3px solid var(--amber)">
+            <div class="met-val" id="cm-fn">0</div>
+            <div class="met-lbl">False Negatives</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1987,6 +2007,17 @@
               document.getElementById("mb-f1").style.width = m.f1 * 100 + "%";
               document.getElementById("mb-fpr").style.width =
                 m.false_positive_rate * 100 + "%";
+            }
+
+            if (m.confusion_matrix) {
+              document.getElementById("cm-tp").textContent =
+                m.confusion_matrix.true_positive;
+              document.getElementById("cm-tn").textContent =
+                m.confusion_matrix.true_negative;
+              document.getElementById("cm-fp").textContent =
+                m.confusion_matrix.false_positive;
+              document.getElementById("cm-fn").textContent =
+                m.confusion_matrix.false_negative;
             }
           }
         } catch (_) {}
